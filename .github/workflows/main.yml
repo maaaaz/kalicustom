@@ -1,0 +1,27 @@
+name: Kali VM customization build script
+
+on: workflow_dispatch
+
+#permissions:
+#  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install prerequisites
+      run: |
+        set -xe
+
+        # silence APT
+        APT_PARAMS="sudo apt -y -qq -o=Dpkg::Use-Pty=0"
+        
+        APT_PARAMS update && APT_PARAMS upgrade ; APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils
+        #sudo apt -y -qq -o=Dpkg::Use-Pty=0 install squashfs-tools isolinux xorriso unzip zip
+        
+    - name: Get GParted Live zip
+      run: |
+        cd /tmp/
