@@ -19,8 +19,44 @@ jobs:
         # silence APT
         APT_PARAMS="sudo apt -y -qq -o=Dpkg::Use-Pty=0"
         
-        $APT_PARAMS update && $APT_PARAMS upgrade ; $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils
-        #sudo apt -y -qq -o=Dpkg::Use-Pty=0 install squashfs-tools isolinux xorriso unzip zip
+        #$APT_PARAMS update && $APT_PARAMS upgrade && $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils axel
+        $APT_PARAMS update && $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils axel
+
+    - name: Download the VM
+      run: |
+        set -xe
+        
+        cd /tmp/
+        #KALI_BASE_ZIP_URL="https://cdimage.kali.org/kali-2024.1/kali-linux-2024.1-virtualbox-amd64.7z"
+        KALI_SHA256="80ba5fdd6037f9261a5f49a7f18a0abb231551a1aec2d97da2344c2a0e72ced8"
+        
+        # testing
+        KALI_BASE_ZIP_URL="http://downloads.sourceforge.net/virtualboximage/debian-3.1r0a-x86-netinstall-2.7z"
+
+        KALI_BASE_FULL_FNAME=$(basename $KALI_BASE_ZIP_URL)
+        KALI_BASE_NAME=$(basename $KALI_BASE_FULL_FNAME .7z)
+
+        # downloading
+        time axel -q $KALI_BASE_ZIP_URL -o $KALI_BASE_FULL_FNAME
+
+        # verifing the checksum
+        echo "KALI_SHA256 $KALI_BASE_FULL_FNAME" | sha256sum -c
+        
+    - name: Prepare env
+      run: |
+        set -xe
+        
+        export VDI_ROOT="/mnt/vdi"
+        echo "VDI_ROOT=$VDI_ROOT" >> $GITHUB_ENV
+        
+        sudo mkdir -p $VDI_ROOT
+        sudo modprobe nbd max_part=16
+        sudo qemu-nbd -c /dev/nbd0 ./kali-linux-2024.1-virtualbox-amd64.vdi
+        sudo mount /dev/nbd0p1 $VDI_ROOT
+        sudo mount --bind /proc $VDI_ROOT/proc/
+        sudo mount --bind /sys $VDI_ROOT/sys/
+        sudo mount --bind /dev $VDI_ROOT/dev/
+        sudo mount --bind /dev/pts $VDI_ROOT/dev/pts/
         
     - name: Get GParted Live zip
       run: |
