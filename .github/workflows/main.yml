@@ -81,9 +81,8 @@ jobs:
     - name: Customize the VDI file of the VM
       run: |
         cd /tmp/
-        export DEBIAN_FRONTEND=noninteractive
         
-        CHROOT_PARAMS="sudo --preserve-env chroot $VDI_ROOT/"
+        CHROOT_PARAMS="env DEBIAN_FRONTEND=noninteractive sudo --preserve-env chroot $VDI_ROOT/"
         APT_PARAMS_VDI='sudo apt -y -q -o=Dpkg::Use-Pty=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"'
 
         # set network
