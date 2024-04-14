@@ -47,8 +47,8 @@ jobs:
         export KALI_EXTRACTED_VDI_DIR="/mnt/extracted/"
         sudo mkdir -p $KALI_EXTRACTED_VDI_DIR
 
-        time 7z l "$KALI_BASE_FULL_PATH"
-        time 7z e "$KALI_BASE_FULL_PATH" "-o$KALI_EXTRACTED_VDI_DIR" *.vdi -r
+        time sudo 7z l "$KALI_BASE_FULL_PATH"
+        time sudo 7z e "$KALI_BASE_FULL_PATH" "-o$KALI_EXTRACTED_VDI_DIR" *.vdi -r
         KALI_VDI_FULL_FNAME=$(basename "$KALI_EXTRACTED_VDI_DIR$KALI_BASE_NAME.vdi")
         KALI_VDI_FULL_PATH=$(readlink -f $KALI_VDI_FULL_FNAME)
 
@@ -126,7 +126,11 @@ jobs:
         $CHROOT_PARAMS rm -rf "/etc/resolv.conf"
 
         # list installed packages
-        $CHROOT_PARAMS dpkg -l | grep '^ii' | awk '{print $2 "\t" $3}' | column -t
+        KALI_VDI_INSTALLED_PACKAGES="/tmp/installed_packages.txt"
+        echo "KALI_VDI_INSTALLED_PACKAGES=$KALI_VDI_INSTALLED_PACKAGES" >> $GITHUB_ENV
+        
+        $CHROOT_PARAMS dpkg -l | grep '^ii' | awk '{print $2 "\t" $3}' | column -t > $KALI_VDI_INSTALLED_PACKAGES
+        
         
     - name: Unprepare environment 
       run: |
@@ -149,3 +153,12 @@ jobs:
         echo "[+] findmnt after unmount"
         findmnt
         echo
+
+    - name: Create a new release 
+      run: |
+        set -xe
+
+        SHA256SUM="$VDI_ROOT/sha256sum_iso.txt"
+        KALI_CUSTOM_7Z="$VDI_ROOT/$KALI_BASE_NAME-maaaaz-edition-$(date '+%Y%m%d').iso"
+        time sudo 7z a "$KALI_CUSTOM_7Z" "$KALI_VDI_FULL_PATH"
+        sha256sum --tag $KALI_CUSTOM_7Z | tee $SHA256SUM
