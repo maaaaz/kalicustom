@@ -45,7 +45,7 @@ jobs:
 
         # extracting the VDI file
         export KALI_EXTRACTED_VDI_DIR="/mnt/extracted/"
-        mkdir -p $KALI_EXTRACTED_VDI_DIR
+        sudo mkdir -p $KALI_EXTRACTED_VDI_DIR
         
         time 7z l "$KALI_BASE_FULL_PATH" -o "$KALI_EXTRACTED_VDI_DIR" *.vdi
         KALI_VDI_FULL_FNAME=$(basename "$KALI_EXTRACTED_VDI_DIR/$KALI_BASE_NAME.vdi")
