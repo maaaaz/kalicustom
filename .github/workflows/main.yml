@@ -40,7 +40,7 @@ jobs:
         time axel -q $KALI_BASE_ZIP_URL -o $KALI_BASE_FULL_FNAME
 
         # verifing the checksum
-        echo "KALI_SHA256 $KALI_BASE_FULL_FNAME" | sha256sum -c
+        echo "$KALI_SHA256 $KALI_BASE_FULL_FNAME" | sha256sum -c
         
     - name: Prepare env
       run: |
