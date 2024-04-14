@@ -80,6 +80,7 @@ jobs:
         
     - name: Customize the VDI file of the VM
       run: |
+        set -xe
         cd /tmp/
         
         CHROOT_PARAMS="env DEBIAN_FRONTEND=noninteractive sudo --preserve-env chroot $VDI_ROOT/"
