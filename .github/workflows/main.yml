@@ -19,7 +19,7 @@ jobs:
         # silence APT
         APT_PARAMS="sudo apt -y -qq -o=Dpkg::Use-Pty=0"
         
-        APT_PARAMS update && APT_PARAMS upgrade ; APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils
+        $APT_PARAMS update && $APT_PARAMS upgrade ; $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils
         #sudo apt -y -qq -o=Dpkg::Use-Pty=0 install squashfs-tools isolinux xorriso unzip zip
         
     - name: Get GParted Live zip
