@@ -39,7 +39,7 @@ jobs:
         KALI_BASE_NAME=$(basename $KALI_BASE_FULL_FNAME .7z)
 
         # downloading
-        time axel -q $KALI_BASE_ZIP_URL -o $KALI_BASE_FULL_FNAME
+        time sudo axel -q $KALI_BASE_ZIP_URL -o $KALI_BASE_FULL_FNAME
 
         # verifing the checksum
         echo "$KALI_SHA256 $KALI_BASE_FULL_FNAME" | sha256sum -c
