@@ -43,9 +43,18 @@ jobs:
         # verifing the checksum
         #echo "$KALI_SHA256 $KALI_BASE_FULL_FNAME" | sha256sum -c
 
+        # extracting the VDI file
+        export KALI_EXTRACTED_VDI_DIR="/mnt/extracted/"
+        mkdir -p $KALI_EXTRACTED_VDI_DIR
+        
+        time 7z l "$KALI_BASE_FULL_PATH" -o "$KALI_EXTRACTED_VDI_DIR" *.vdi
+        KALI_VDI_FULL_FNAME=$(basename "$KALI_EXTRACTED_VDI_DIR/$KALI_BASE_NAME.vdi")
+        KALI_VDI_FULL_PATH=$(readlink -f $KALI_VDI_FULL_FNAME)
+
         echo "KALI_BASE_FULL_FNAME=$KALI_BASE_FULL_FNAME" >> $GITHUB_ENV
         echo "KALI_BASE_FULL_PATH=$KALI_BASE_FULL_PATH" >> $GITHUB_ENV
         echo "KALI_BASE_NAME=$KALI_BASE_NAME" >> $GITHUB_ENV
+        echo "KALI_VDI_FULL_FNAME=$KALI_VDI_FULL_FNAME" >> $GITHUB_ENV
         
     - name: Prepare env
       run: |
@@ -57,7 +66,7 @@ jobs:
         
         sudo mkdir -p $VDI_ROOT
         sudo modprobe nbd max_part=16
-        sudo qemu-nbd -c /dev/nbd0 "$KALI_BASE_FULL_PATH"
+        sudo qemu-nbd -c /dev/nbd0 "$KALI_VDI_FULL_FNAME"
         sudo mount /dev/nbd0p1 $VDI_ROOT
         sudo mount --bind /proc $VDI_ROOT/proc/
         sudo mount --bind /sys $VDI_ROOT/sys/
