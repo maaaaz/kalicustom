@@ -111,6 +111,11 @@ jobs:
         # full-upgrade of packages
         $CHROOT_PARAMS $APT_PARAMS full-upgrade
 
+        # clean apt
+        $CHROOT_PARAMS apt -y -q autoremove --purge
+        $CHROOT_PARAMS apt -y -q autoclean
+        $CHROOT_PARAMS apt -y -q clean
+
         # set keyboard
         $CHROOT_PARAMS sh -c "sudo sed -i 's/XKBLAYOUT=\"\w*\"/XKBLAYOUT=\"'fr'\"/g' /etc/default/keyboard"
 
