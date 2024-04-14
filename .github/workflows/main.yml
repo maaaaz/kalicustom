@@ -25,8 +25,9 @@ jobs:
     - name: Download the VM
       run: |
         set -xe
-        
-        cd /tmp/
+
+        sudo mkdir -p /mnt/source
+        cd /mnt/source/
         KALI_BASE_ZIP_URL="https://cdimage.kali.org/kali-2024.1/kali-linux-2024.1-virtualbox-amd64.7z"
         KALI_SHA256="80ba5fdd6037f9261a5f49a7f18a0abb231551a1aec2d97da2344c2a0e72ced8"
         
@@ -116,7 +117,7 @@ jobs:
         $CHROOT_PARAMS APT_PARAMS_VDI autoclean
         $CHROOT_PARAMS APT_PARAMS_VDI clean
 
-        # set keyboard
+        # set keyboard azerty
         $CHROOT_PARAMS sh -c "sudo sed -i 's/XKBLAYOUT=\"\w*\"/XKBLAYOUT=\"'fr'\"/g' /etc/default/keyboard"
 
         # unhold grub
@@ -159,6 +160,6 @@ jobs:
         set -xe
 
         SHA256SUM="$VDI_ROOT/sha256sum_iso.txt"
-        KALI_CUSTOM_7Z="$VDI_ROOT/$KALI_BASE_NAME-maaaaz-edition-$(date '+%Y%m%d').iso"
+        KALI_CUSTOM_7Z="$VDI_ROOT/$KALI_BASE_NAME-maaaaz-edition-$(date '+%Y%m%d').7z"
         time sudo 7z a "$KALI_CUSTOM_7Z" "$KALI_VDI_FULL_PATH"
         sha256sum --tag $KALI_CUSTOM_7Z | tee $SHA256SUM
