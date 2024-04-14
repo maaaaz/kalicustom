@@ -84,7 +84,7 @@ jobs:
         cd /tmp/
         
         CHROOT_PARAMS="env DEBIAN_FRONTEND=noninteractive sudo --preserve-env chroot $VDI_ROOT/"
-        APT_PARAMS_VDI="apt -y -q -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold'"
+        APT_PARAMS_VDI="apt -y -q -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold"
 
         # set network
         $CHROOT_PARAMS sh -c "echo nameserver 8.8.8.8| tee /etc/resolv.conf"
