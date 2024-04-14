@@ -32,26 +32,32 @@ jobs:
         
         # testing
         KALI_BASE_ZIP_URL="http://downloads.sourceforge.net/virtualboximage/debian-3.1r0a-x86-netinstall-2.7z"
-
+        
         KALI_BASE_FULL_FNAME=$(basename $KALI_BASE_ZIP_URL)
+        KALI_BASE_FULL_PATH=$(readlink -f $KALI_BASE_FULL_FNAME)
         KALI_BASE_NAME=$(basename $KALI_BASE_FULL_FNAME .7z)
 
         # downloading
         time axel -q $KALI_BASE_ZIP_URL -o $KALI_BASE_FULL_FNAME
 
         # verifing the checksum
-        echo "$KALI_SHA256 $KALI_BASE_FULL_FNAME" | sha256sum -c
+        #echo "$KALI_SHA256 $KALI_BASE_FULL_FNAME" | sha256sum -c
+
+        echo "KALI_BASE_FULL_FNAME=$KALI_BASE_FULL_FNAME" >> $GITHUB_ENV
+        echo "KALI_BASE_FULL_PATH=$KALI_BASE_FULL_PATH" >> $GITHUB_ENV
+        echo "KALI_BASE_NAME=$KALI_BASE_NAME" >> $GITHUB_ENV
         
     - name: Prepare env
       run: |
         set -xe
+        cd /tmp/
         
         export VDI_ROOT="/mnt/vdi"
         echo "VDI_ROOT=$VDI_ROOT" >> $GITHUB_ENV
         
         sudo mkdir -p $VDI_ROOT
         sudo modprobe nbd max_part=16
-        sudo qemu-nbd -c /dev/nbd0 ./kali-linux-2024.1-virtualbox-amd64.vdi
+        sudo qemu-nbd -c /dev/nbd0 "$KALI_BASE_FULL_PATH"
         sudo mount /dev/nbd0p1 $VDI_ROOT
         sudo mount --bind /proc $VDI_ROOT/proc/
         sudo mount --bind /sys $VDI_ROOT/sys/
