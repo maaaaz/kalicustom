@@ -17,8 +17,7 @@ jobs:
         set -xe
 
         # silence APT
-        APT_PARAMS='sudo apt -y -q -o=Dpkg::Use-Pty=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"'
-        echo "APT_PARAMS=$APT_PARAMS" >> $GITHUB_ENV
+        APT_PARAMS='sudo apt -y -q -o=Dpkg::Use-Pty=0'
         
         #$APT_PARAMS update && $APT_PARAMS upgrade && $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils axel
         $APT_PARAMS update && $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils axel
@@ -81,6 +80,7 @@ jobs:
       run: |
         cd /tmp/
         CHROOT_PARAMS="DEBIAN_FRONTEND=noninteractive sudo --preserve-env chroot $VDI_ROOT/"
+        APT_PARAMS_VDI='sudo apt -y -q -o=Dpkg::Use-Pty=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"'
 
         # set network
         $CHROOT_PARAMS sh -c "echo nameserver 8.8.8.8| tee /etc/resolv.conf"
@@ -91,13 +91,13 @@ jobs:
 
         # update the packages
         $CHROOT_PARAMS apt-mark hold grub-pc
-        $CHROOT_PARAMS $APT_PARAMS update
+        $CHROOT_PARAMS $APT_PARAMS_VDI update
 
         wget -nv 'https://raw.githubusercontent.com/maaaaz/dotfiles/master/debian_ubuntu_packages.txt' -O '/tmp/debian_ubuntu_packages.txt'
-        $CHROOT_PARAMS $APT_PARAMS install $(cat '/tmp/debian_ubuntu_packages.txt')
+        $CHROOT_PARAMS $APT_PARAMS_VDI install $(cat '/tmp/debian_ubuntu_packages.txt')
 
         wget -nv 'https://raw.githubusercontent.com/maaaaz/dotfiles/master/kali_missing_packages.txt' -O '/tmp/kali_missing_packages.txt'
-        $CHROOT_PARAMS $APT_PARAMS install $(cat '/tmp/kali_missing_packages.txt') 
+        $CHROOT_PARAMS $APT_PARAMS_VDI install $(cat '/tmp/kali_missing_packages.txt') 
 
         # install non-packaged useful tools
         $CHROOT_PARAMS mkdir -p /opt/escobar/
@@ -109,12 +109,12 @@ jobs:
         ##################################
 
         # full-upgrade of packages
-        $CHROOT_PARAMS $APT_PARAMS full-upgrade
+        $CHROOT_PARAMS $APT_PARAMS_VDI full-upgrade
 
         # clean apt
-        $CHROOT_PARAMS apt -y -q autoremove --purge
-        $CHROOT_PARAMS apt -y -q autoclean
-        $CHROOT_PARAMS apt -y -q clean
+        $CHROOT_PARAMS APT_PARAMS_VDI autoremove --purge
+        $CHROOT_PARAMS APT_PARAMS_VDI autoclean
+        $CHROOT_PARAMS APT_PARAMS_VDI clean
 
         # set keyboard
         $CHROOT_PARAMS sh -c "sudo sed -i 's/XKBLAYOUT=\"\w*\"/XKBLAYOUT=\"'fr'\"/g' /etc/default/keyboard"
