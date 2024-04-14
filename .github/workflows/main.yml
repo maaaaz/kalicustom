@@ -84,7 +84,7 @@ jobs:
         cd /tmp/
         
         CHROOT_PARAMS="env DEBIAN_FRONTEND=noninteractive sudo --preserve-env chroot $VDI_ROOT/"
-        APT_PARAMS_VDI='apt -y -q -o=Dpkg::Use-Pty=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"'
+        APT_PARAMS_VDI='apt -y -q -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"'
 
         # set network
         $CHROOT_PARAMS sh -c "echo nameserver 8.8.8.8| tee /etc/resolv.conf"
@@ -98,8 +98,8 @@ jobs:
         $CHROOT_PARAMS $APT_PARAMS_VDI update
 
         wget -nv 'https://raw.githubusercontent.com/maaaaz/dotfiles/master/debian_ubuntu_packages.txt' -O '/tmp/debian_ubuntu_packages.txt'
-        DEBIAN_FRONTEND=noninteractive sudo --preserve-env chroot $VDI_ROOT/ apt -y -q -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install $(cat '/tmp/debian_ubuntu_packages.txt')
-        #$CHROOT_PARAMS $APT_PARAMS_VDI install $(cat '/tmp/debian_ubuntu_packages.txt')
+        #DEBIAN_FRONTEND=noninteractive sudo --preserve-env chroot $VDI_ROOT/ apt -y -q -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install $(cat '/tmp/debian_ubuntu_packages.txt')
+        $CHROOT_PARAMS $APT_PARAMS_VDI install $(cat '/tmp/debian_ubuntu_packages.txt')
         
 
         wget -nv 'https://raw.githubusercontent.com/maaaaz/dotfiles/master/kali_missing_packages.txt' -O '/tmp/kali_missing_packages.txt'
