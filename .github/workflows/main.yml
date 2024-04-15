@@ -232,10 +232,14 @@ jobs:
         echo "KALI_RELEASE_7Z_FILE=$KALI_RELEASE_7Z_FILE" >> $GITHUB_ENV
 
     - name: Create a new release and upload it on archive.org
+      env:   
+        SECRET_ARCHIVE_ORG_LOGIN: ${{ secrets.SECRET_ARCHIVE_ORG_LOGIN }}
+        SECRET_ARCHIVE_ORG_PASSWORD: ${{ secrets.SECRET_ARCHIVE_ORG_PASSWORD }}
       run: |
         set -xe
         
         cd /tmp/
         wget -nv "https://archive.org/download/ia-pex/ia" -O "./ia"
         chmod +x "./ia"
-        ./ia help
+        ./ia configure --username=$SECRET_ARCHIVE_ORG_LOGIN --password=$SECRET_ARCHIVE_ORG_PASSWORD
+        ./ia upload kalimaaaazedition $KALI_RELEASE_7Z_FILE --metadata="mediatype:software"
