@@ -224,13 +224,13 @@ jobs:
         sudo vboxmanage modifymedium --compact "$KALI_VDI_FULL_PATH"
         sudo ls -alh $KALI_VDI_FULL_PATH
 
-    - name: Create a new release 
+    - name: Create a new release and upload it on archive.org
       run: |
         set -xe
 
         cd /tmp/
-        curl -LOs https://archive.org/download/ia-pex/ia
-        chmod +x ia
+        wget -nv "https://archive.org/download/ia-pex/ia" -O "./ia"
+        chmod +x "./ia"
         ./ia help
 
         cd /mnt/
