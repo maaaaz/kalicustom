@@ -15,12 +15,12 @@ jobs:
     - name: Install prerequisites
       run: |
         set -xe
-
+        
         # silence APT
         APT_PARAMS='sudo apt -y -q -o=Dpkg::Use-Pty=0'
         
         #$APT_PARAMS update && $APT_PARAMS upgrade && $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils axel
-        $APT_PARAMS update && $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils axel
+        $APT_PARAMS update && $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils axel virtualbox
 
     - name: Download the VM
       run: |
@@ -92,7 +92,17 @@ jobs:
         # customize
         $CHROOT_PARAMS wget -nv "https://github.com/maaaaz/dotfiles/raw/master/.vimrc" -O "/root/.vimrc"
         $CHROOT_PARAMS su kali -c "wget -nv 'https://github.com/maaaaz/dotfiles/raw/master/.vimrc' -O '/home/kali/.vimrc'"
+        
+        $CHROOT_PARAMS su kali -c "chsh -s /bin/bash"
+        $CHROOT_PARAMS chsh -s "/bin/bash"
 
+        # set french timezone
+        $CHROOT_PARAMS rm -rf /etc/localtime
+        $CHROOT_PARAMS ln -s /usr/share/zoneinfo/Europe/Paris /etc/localtime
+        
+        # set keyboard azerty
+        $CHROOT_PARAMS sh -c "sed -i 's/XKBLAYOUT=\"\w*\"/XKBLAYOUT=\"'fr'\"/g' /etc/default/keyboard"
+        
         # update the packages
         $CHROOT_PARAMS apt-mark hold grub-pc
         $CHROOT_PARAMS $APT_PARAMS_VDI update
@@ -120,14 +130,29 @@ jobs:
         $CHROOT_PARAMS $APT_PARAMS_VDI autoclean
         $CHROOT_PARAMS $APT_PARAMS_VDI clean
 
-        # set keyboard azerty
-        $CHROOT_PARAMS sh -c "sudo sed -i 's/XKBLAYOUT=\"\w*\"/XKBLAYOUT=\"'fr'\"/g' /etc/default/keyboard"
-
         # unhold grub
         $CHROOT_PARAMS apt-mark unhold grub-pc
         
         # remove network
         $CHROOT_PARAMS rm -rf "/etc/resolv.conf"
+
+        # disable services
+        $CHROOT_PARAMS systemctl list-unit-files --no-pager
+        
+        $CHROOT_PARAMS systemctl stop rpcbind.socket
+        $CHROOT_PARAMS systemctl mask rpcbind.socket
+
+        $CHROOT_PARAMS systemctl stop rpcbind
+        $CHROOT_PARAMS systemctl mask rpcbind
+        
+        $CHROOT_PARAMS systemctl stop xrdp
+        $CHROOT_PARAMS systemctl mask xrdp
+
+        $CHROOT_PARAMS systemctl stop systemd-resolved.service
+        $CHROOT_PARAMS systemctl mask systemd-resolved.service
+
+        $CHROOT_PARAMS systemctl stop tftpd-hpa.service
+        $CHROOT_PARAMS systemctl mask tftpd-hpa.service
 
         # list installed packages
         KALI_VDI_INSTALLED_PACKAGES="/tmp/installed_packages.txt"
@@ -152,11 +177,18 @@ jobs:
         sudo umount $VDI_ROOT
 
         sudo qemu-nbd -d /dev/nbd0
-        sudo rmmod nbd
 
         echo "[+] findmnt after unmount"
         findmnt
         echo
+
+    - name: Compact the VDI file
+      run: |
+        set -xe
+        
+        ls -alh $KALI_VDI_FULL_PATH
+        vboxmanage modifymedium --compact "$KALI_VDI_FULL_PATH"
+        ls -alh $KALI_VDI_FULL_PATH
 
     - name: Create a new release 
       run: |
