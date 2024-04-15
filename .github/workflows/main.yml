@@ -190,9 +190,9 @@ jobs:
 
         # list installed packages
         KALI_RELEASE_PACKAGE_LIST_FILE="/tmp/installed_packages.txt"
-        
-        ($CHROOT_PARAMS dpkg -l | grep '^ii' | awk '{print $2 "\t" $3}' | column -t) > $KALI_VDI_INSTALLED_PACKAGES
         echo "KALI_RELEASE_PACKAGE_LIST_FILE=$KALI_RELEASE_PACKAGE_LIST_FILE" >> $GITHUB_ENV
+        
+        ($CHROOT_PARAMS dpkg -l | grep '^ii' | awk '{print $2 "\t" $3}' | column -t) > $KALI_RELEASE_PACKAGE_LIST_FILE
         
     - name: Unprepare environment 
       run: |
