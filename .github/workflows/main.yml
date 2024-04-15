@@ -222,7 +222,7 @@ jobs:
         cd /mnt/
         KALI_RELEASE_SHA256SUM_FILE="$VDI_ROOT/$KALI_BASE_NAME-maaaaz-edition-$(date '+%Y%m%d')-sha256sum.txt"
         KALI_RELEASE_7Z_FILE="$VDI_ROOT/$KALI_BASE_NAME-maaaaz-edition-$(date '+%Y%m%d').7z"
-        time sudo 7z a "$KALI_RELEASE_7Z_FILE" "$KALI_VDI_FULL_PATH" -mx7
+        time sudo 7z a "$KALI_RELEASE_7Z_FILE" "$KALI_VDI_FULL_PATH"
         sudo ls -alh $KALI_RELEASE_7Z_FILE
         
         time sha256sum --tag $KALI_RELEASE_7Z_FILE | sudo tee $KALI_RELEASE_SHA256SUM_FILE
