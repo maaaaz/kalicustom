@@ -203,9 +203,9 @@ jobs:
       run: |
         set -xe
         
-        ls -alh $KALI_VDI_FULL_PATH
-        vboxmanage modifymedium --compact "$KALI_VDI_FULL_PATH"
-        ls -alh $KALI_VDI_FULL_PATH
+        sudo ls -alh $KALI_VDI_FULL_PATH
+        sudo vboxmanage modifymedium --compact "$KALI_VDI_FULL_PATH"
+        sudo ls -alh $KALI_VDI_FULL_PATH
 
     - name: Create a new release 
       run: |
