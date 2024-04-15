@@ -189,8 +189,8 @@ jobs:
         $CHROOT_PARAMS systemctl mask tftpd-hpa.service
 
         # list installed packages
-        KALI_VDI_INSTALLED_PACKAGES="/tmp/installed_packages.txt"
-        echo "KALI_VDI_INSTALLED_PACKAGES=$KALI_VDI_INSTALLED_PACKAGES" >> $GITHUB_ENV
+        KALI_RELEASE_PACKAGE_LIST_FILE="/tmp/installed_packages.txt"
+        echo "KALI_RELEASE_PACKAGE_LIST_FILE=$KALI_RELEASE_PACKAGE_LIST_FILE" >> $GITHUB_ENV
         
         $CHROOT_PARAMS dpkg -l | grep '^ii' | awk '{print $2 "\t" $3}' | column -t > $KALI_VDI_INSTALLED_PACKAGES
         
@@ -224,18 +224,27 @@ jobs:
         sudo vboxmanage modifymedium --compact "$KALI_VDI_FULL_PATH"
         sudo ls -alh $KALI_VDI_FULL_PATH
 
-    - name: Create a new release and upload it on archive.org
+    - name: Create a 7z release file and upload it on archive.org
       run: |
         set -xe
 
+        cd /mnt/
+        KALI_RELEASE_SHA256SUM_FILE="$VDI_ROOT/$KALI_BASE_NAME-maaaaz-edition-$(date '+%Y%m%d')-sha256sum.txt"
+        KALI_RELEASE_7Z_FILE="$VDI_ROOT/$KALI_BASE_NAME-maaaaz-edition-$(date '+%Y%m%d').7z"
+        time sudo 7z a "$KALI_RELEASE_7Z_FILE" "$KALI_VDI_FULL_PATH"
+        sudo ls -alh $KALI_RELEASE_7Z_FILE
+        
+        time sha256sum --tag $KALI_RELEASE_7Z_FILE | tee $KALI_RELEASE_SHA256SUM_FILE
+        sudo ls -alh $KALI_RELEASE_SHA256SUM_FILE
+        
+        echo "KALI_RELEASE_SHA256SUM_FILE=$KALI_RELEASE_SHA256SUM_FILE" >> $GITHUB_ENV
+        echo "KALI_RELEASE_7Z_FILE=$KALI_RELEASE_7Z_FILE" >> $GITHUB_ENV
+
+    - name: Create a new release and upload it on archive.org
+      run: |
+        set -xe
+        
         cd /tmp/
         wget -nv "https://archive.org/download/ia-pex/ia" -O "./ia"
         chmod +x "./ia"
         ./ia help
-
-        cd /mnt/
-        SHA256SUM="$VDI_ROOT/sha256sum_iso.txt"
-        KALI_CUSTOM_7Z="$VDI_ROOT/$KALI_BASE_NAME-maaaaz-edition-$(date '+%Y%m%d').7z"
-        time sudo 7z a "$KALI_CUSTOM_7Z" "$KALI_VDI_FULL_PATH"
-        sha256sum --tag $KALI_CUSTOM_7Z | tee $SHA256SUM
-        sudo ls -alh $KALI_CUSTOM_7Z
