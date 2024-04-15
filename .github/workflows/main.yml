@@ -92,14 +92,15 @@ jobs:
         # set network
         $CHROOT_PARAMS sh -c "echo nameserver 8.8.8.8| tee /etc/resolv.conf"
         
-        # customize
+        # customize .vimrc
         $CHROOT_PARAMS wget -nv "https://github.com/maaaaz/dotfiles/raw/master/.vimrc" -O "/root/.vimrc"
         $CHROOT_PARAMS su kali -c "wget -nv 'https://github.com/maaaaz/dotfiles/raw/master/.vimrc' -O '/home/kali/.vimrc'"
-        
+
+        # change shell
         $CHROOT_PARAMS usermod -s "/bin/bash" kali
         $CHROOT_PARAMS usermod -s "/bin/bash" root
         
-        # for vbox shared folders
+        # fix permissions for vbox shared folders
         $CHROOT_PARAMS usermod -a -G vboxsf kali
 
         # set virtualenvs
@@ -123,11 +124,10 @@ jobs:
         $CHROOT_PARAMS rm -rf /etc/localtime
         $CHROOT_PARAMS ln -s /usr/share/zoneinfo/Europe/Paris /etc/localtime
         
-        # set keyboard azerty
+        # set french azerty keyboard 
         $CHROOT_PARAMS sh -c "sed -i 's/XKBLAYOUT=\"\w*\"/XKBLAYOUT=\"'fr'\"/g' /etc/default/keyboard"
 
-
-    - name: Customize the VDI file of the VM - install additional packages
+    - name: Customize the VDI file of the VM - update current packages and install additional ones
       run: |
         set -xe
         cd /tmp/
@@ -231,10 +231,10 @@ jobs:
         cd /mnt/
         KALI_RELEASE_SHA256SUM_FILE="$VDI_ROOT/$KALI_BASE_NAME-maaaaz-edition-$(date '+%Y%m%d')-sha256sum.txt"
         KALI_RELEASE_7Z_FILE="$VDI_ROOT/$KALI_BASE_NAME-maaaaz-edition-$(date '+%Y%m%d').7z"
-        time sudo 7z a "$KALI_RELEASE_7Z_FILE" "$KALI_VDI_FULL_PATH"
+        time sudo 7z a "$KALI_RELEASE_7Z_FILE" "$KALI_VDI_FULL_PATH" -mx7
         sudo ls -alh $KALI_RELEASE_7Z_FILE
         
-        time sha256sum --tag $KALI_RELEASE_7Z_FILE | tee $KALI_RELEASE_SHA256SUM_FILE
+        time sha256sum --tag $KALI_RELEASE_7Z_FILE | sudo tee $KALI_RELEASE_SHA256SUM_FILE
         sudo ls -alh $KALI_RELEASE_SHA256SUM_FILE
         
         echo "KALI_RELEASE_SHA256SUM_FILE=$KALI_RELEASE_SHA256SUM_FILE" >> $GITHUB_ENV
