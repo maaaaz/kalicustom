@@ -107,6 +107,7 @@ jobs:
         venv_home="grep -i 'workon_home' ~/.bashrc ||  echo 'export WORKON_HOME=~/.virtualenvs' >> ~/.bashrc"
         venv_python="grep -i 'virtualenvwrapper_python' ~/.bashrc || echo 'export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3' >> ~/.bashrc"
         venv_wrapper="grep -i 'virtualenvwrapper.sh' ~/.bashrc ||  echo 'source /usr/share/virtualenvwrapper/virtualenvwrapper.sh' >> ~/.bashrc"
+        venv_reload="source ~/.bashrc"
         
         $CHROOT_PARAMS su root -c "$venv_home"
         $CHROOT_PARAMS su kali -c "$venv_home"
@@ -117,8 +118,8 @@ jobs:
         $CHROOT_PARAMS su root -c "$venv_wrapper"
         $CHROOT_PARAMS su kali -c "$venv_wrapper"
         
-        $CHROOT_PARAMS su root -c "source ~/.bashrc"
-        $CHROOT_PARAMS su kali -c "source ~/.bashrc"
+        $CHROOT_PARAMS su root -c "$venv_reload"
+        $CHROOT_PARAMS su kali -c "$venv_reload"
         
         # set french timezone
         $CHROOT_PARAMS rm -rf /etc/localtime
@@ -135,11 +136,11 @@ jobs:
         $CHROOT_PARAMS apt-mark hold grub-pc
         $CHROOT_PARAMS $APT_PARAMS_VDI update
 
-        wget -nv 'https://raw.githubusercontent.com/maaaaz/dotfiles/master/debian_ubuntu_packages.txt' -O '/tmp/debian_ubuntu_packages.txt'
-        $CHROOT_PARAMS $APT_PARAMS_VDI install $(cat '/tmp/debian_ubuntu_packages.txt')
-        
         wget -nv 'https://raw.githubusercontent.com/maaaaz/dotfiles/master/kali_missing_packages.txt' -O '/tmp/kali_missing_packages.txt'
         $CHROOT_PARAMS $APT_PARAMS_VDI install $(cat '/tmp/kali_missing_packages.txt') 
+        
+        wget -nv 'https://raw.githubusercontent.com/maaaaz/dotfiles/master/debian_ubuntu_packages.txt' -O '/tmp/debian_ubuntu_packages.txt'
+        $CHROOT_PARAMS $APT_PARAMS_VDI install $(cat '/tmp/debian_ubuntu_packages.txt')
 
         # install non-packaged useful tools
         $CHROOT_PARAMS mkdir -p /opt/escobar/
@@ -173,19 +174,10 @@ jobs:
         # disable services
         $CHROOT_PARAMS systemctl list-unit-files --no-pager
         
-        $CHROOT_PARAMS systemctl stop rpcbind.socket
         $CHROOT_PARAMS systemctl mask rpcbind.socket
-
-        $CHROOT_PARAMS systemctl stop rpcbind
         $CHROOT_PARAMS systemctl mask rpcbind
-        
-        $CHROOT_PARAMS systemctl stop xrdp
         $CHROOT_PARAMS systemctl mask xrdp
-
-        $CHROOT_PARAMS systemctl stop systemd-resolved.service
         $CHROOT_PARAMS systemctl mask systemd-resolved.service
-
-        $CHROOT_PARAMS systemctl stop tftpd-hpa.service
         $CHROOT_PARAMS systemctl mask tftpd-hpa.service
 
         # list installed packages
