@@ -112,6 +112,10 @@ jobs:
 
         $CHROOT_PARAMS su root -c "$venv_wrapper"
         $CHROOT_PARAMS su kali -c "$venv_wrapper"
+        
+        $CHROOT_PARAMS su root -c "source ~/.bashrc"
+        $CHROOT_PARAMS su kali -c "source ~/.bashrc"
+        
 
         # set french timezone
         $CHROOT_PARAMS rm -rf /etc/localtime
@@ -211,6 +215,12 @@ jobs:
       run: |
         set -xe
 
+        cd /tmp/
+        curl -LOs https://archive.org/download/ia-pex/ia
+        chmod +x ia
+        ./ia help
+
+        cd /mnt/
         SHA256SUM="$VDI_ROOT/sha256sum_iso.txt"
         KALI_CUSTOM_7Z="$VDI_ROOT/$KALI_BASE_NAME-maaaaz-edition-$(date '+%Y%m%d').7z"
         time sudo 7z a "$KALI_CUSTOM_7Z" "$KALI_VDI_FULL_PATH"
