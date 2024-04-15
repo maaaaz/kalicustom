@@ -78,13 +78,16 @@ jobs:
         sudo mount --bind /dev $VDI_ROOT/dev/
         sudo mount --bind /dev/pts $VDI_ROOT/dev/pts/
         
-    - name: Customize the VDI file of the VM
+    - name: Customize the VDI file of the VM - network / dotfiles / shell / venvs / timezone / keymap
       run: |
         set -xe
         cd /tmp/
         
         CHROOT_PARAMS="env DEBIAN_FRONTEND=noninteractive sudo --preserve-env chroot $VDI_ROOT/"
         APT_PARAMS_VDI="apt -y -q -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold"
+
+        echo "CHROOT_PARAMS=$CHROOT_PARAMS" >> $GITHUB_ENV
+        echo "APT_PARAMS_VDI=$APT_PARAMS_VDI" >> $GITHUB_ENV
 
         # set network
         $CHROOT_PARAMS sh -c "echo nameserver 8.8.8.8| tee /etc/resolv.conf"
@@ -116,14 +119,18 @@ jobs:
         $CHROOT_PARAMS su root -c "source ~/.bashrc"
         $CHROOT_PARAMS su kali -c "source ~/.bashrc"
         
-
         # set french timezone
         $CHROOT_PARAMS rm -rf /etc/localtime
         $CHROOT_PARAMS ln -s /usr/share/zoneinfo/Europe/Paris /etc/localtime
         
         # set keyboard azerty
         $CHROOT_PARAMS sh -c "sed -i 's/XKBLAYOUT=\"\w*\"/XKBLAYOUT=\"'fr'\"/g' /etc/default/keyboard"
-        
+
+
+    - name: Customize the VDI file of the VM - install additional packages
+      run: |
+        set -xe
+        cd /tmp/
         # update the packages
         $CHROOT_PARAMS apt-mark hold grub-pc
         $CHROOT_PARAMS $APT_PARAMS_VDI update
@@ -143,6 +150,9 @@ jobs:
         # TODO HERE: upgrade the vbox additions
         ##################################
 
+    - name: Customize the VDI file of the VM - full package upgrade
+      run: |
+        set -xe
         # full-upgrade of packages
         $CHROOT_PARAMS $APT_PARAMS_VDI full-upgrade
 
@@ -153,7 +163,10 @@ jobs:
 
         # unhold grub
         $CHROOT_PARAMS apt-mark unhold grub-pc
-        
+
+    - name: Customize the VDI file of the VM - disable services
+      run: |
+        set -xe
         # remove network
         $CHROOT_PARAMS rm -rf "/etc/resolv.conf"
 
@@ -225,3 +238,4 @@ jobs:
         KALI_CUSTOM_7Z="$VDI_ROOT/$KALI_BASE_NAME-maaaaz-edition-$(date '+%Y%m%d').7z"
         time sudo 7z a "$KALI_CUSTOM_7Z" "$KALI_VDI_FULL_PATH"
         sha256sum --tag $KALI_CUSTOM_7Z | tee $SHA256SUM
+        sudo ls -alh $KALI_CUSTOM_7Z
