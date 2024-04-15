@@ -93,8 +93,25 @@ jobs:
         $CHROOT_PARAMS wget -nv "https://github.com/maaaaz/dotfiles/raw/master/.vimrc" -O "/root/.vimrc"
         $CHROOT_PARAMS su kali -c "wget -nv 'https://github.com/maaaaz/dotfiles/raw/master/.vimrc' -O '/home/kali/.vimrc'"
         
-        $CHROOT_PARAMS su kali -c "chsh -s /bin/bash"
-        $CHROOT_PARAMS chsh -s "/bin/bash"
+        $CHROOT_PARAMS usermod -s "/bin/bash" kali
+        $CHROOT_PARAMS usermod -s "/bin/bash" root
+        
+        # for vbox shared folders
+        $CHROOT_PARAMS usermod -a -G vboxsf kali
+
+        # set virtualenvs
+        venv_home="grep -i 'workon_home' ~/.bashrc ||  echo 'export WORKON_HOME=~/.virtualenvs' >> ~/.bashrc"
+        venv_python="grep -i 'virtualenvwrapper_python' ~/.bashrc || echo 'export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3' >> ~/.bashrc"
+        venv_wrapper="grep -i 'virtualenvwrapper.sh' ~/.bashrc ||  echo 'source /usr/share/virtualenvwrapper/virtualenvwrapper.sh' >> ~/.bashrc"
+        
+        $CHROOT_PARAMS su root -c "$venv_home"
+        $CHROOT_PARAMS su kali -c "$venv_home"
+
+        $CHROOT_PARAMS su root -c "$venv_python"
+        $CHROOT_PARAMS su kali -c "$venv_python"
+
+        $CHROOT_PARAMS su root -c "$venv_wrapper"
+        $CHROOT_PARAMS su kali -c "$venv_wrapper"
 
         # set french timezone
         $CHROOT_PARAMS rm -rf /etc/localtime
