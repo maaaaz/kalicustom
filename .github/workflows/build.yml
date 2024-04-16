@@ -31,8 +31,9 @@ jobs:
         KALI_BASE_ZIP_URL="https://cdimage.kali.org/kali-2024.1/kali-linux-2024.1-virtualbox-amd64.7z"
         KALI_SHA256="80ba5fdd6037f9261a5f49a7f18a0abb231551a1aec2d97da2344c2a0e72ced8"
         
-        # testing
+        # testing and debugging ##
         #KALI_BASE_ZIP_URL="http://downloads.sourceforge.net/virtualboximage/debian-3.1r0a-x86-netinstall-2.7z"
+        ##########################
         
         KALI_BASE_FULL_FNAME=$(basename $KALI_BASE_ZIP_URL)
         KALI_BASE_FULL_PATH=$(readlink -f $KALI_BASE_FULL_FNAME)
