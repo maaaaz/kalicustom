@@ -18,9 +18,7 @@ jobs:
         
         # silence APT
         APT_PARAMS='sudo apt -y -q -o=Dpkg::Use-Pty=0'
-        
-        $APT_PARAMS update && $APT_PARAMS upgrade && $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils axel
-        #$APT_PARAMS update && $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils axel virtualbox
+        $APT_PARAMS update && $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils axel virtualbox
 
     - name: Download the VM
       run: |
