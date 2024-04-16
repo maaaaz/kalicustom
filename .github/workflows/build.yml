@@ -120,7 +120,7 @@ jobs:
         $CHROOT_PARAMS su root -c "$venv_reload"
         $CHROOT_PARAMS su kali -c "$venv_reload"
         
-        $CHROOT_PARAMS su root -c "mkvirtualenv -p python3 venvcommon && wget -nv 'https://github.com/maaaaz/dotfiles/raw/master/python_common.txt' -O '/tmp/python_common.txt' && pip3 install -r '/tmp/python_common.txt'"
+        #$CHROOT_PARAMS su root -c "mkvirtualenv -p python3 venvcommon && wget -nv 'https://github.com/maaaaz/dotfiles/raw/master/python_common.txt' -O '/tmp/python_common.txt' && pip3 install -r '/tmp/python_common.txt'"
 
         ##################################
         # TODO HERE: create venvcommon
