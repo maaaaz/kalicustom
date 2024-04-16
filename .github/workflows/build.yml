@@ -117,7 +117,7 @@ jobs:
         $CHROOT_PARAMS su root -c "$venv_wrapper"
         $CHROOT_PARAMS su kali -c "$venv_wrapper"
         
-        $CHROOT_PARAMS bash -l -c "$venv_reload"
+        $CHROOT_PARAMS bash -l -c "source ~/.bashrc"
         $CHROOT_PARAMS su kali -c "bash -l -c '$venv_reload'"
         
         #$CHROOT_PARAMS su root -c "mkvirtualenv -p python3 venvcommon && wget -nv 'https://github.com/maaaaz/dotfiles/raw/master/python_common.txt' -O '/tmp/python_common.txt' && pip3 install -r '/tmp/python_common.txt'"
