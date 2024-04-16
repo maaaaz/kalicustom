@@ -2,8 +2,8 @@ name: Kali VM customization build script
 
 on: workflow_dispatch
 
-#permissions:
-#  contents: write
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -19,8 +19,8 @@ jobs:
         # silence APT
         APT_PARAMS='sudo apt -y -q -o=Dpkg::Use-Pty=0'
         
-        #$APT_PARAMS update && $APT_PARAMS upgrade && $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils axel
-        $APT_PARAMS update && $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils axel virtualbox
+        $APT_PARAMS update && $APT_PARAMS upgrade && $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils axel
+        #$APT_PARAMS update && $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils axel virtualbox
 
     - name: Download the VM
       run: |
@@ -120,6 +120,10 @@ jobs:
         
         $CHROOT_PARAMS su root -c "$venv_reload"
         $CHROOT_PARAMS su kali -c "$venv_reload"
+
+        ##################################
+        # TODO HERE: create venvcommon
+        ##################################
         
         # set french timezone
         $CHROOT_PARAMS rm -rf /etc/localtime
@@ -179,9 +183,13 @@ jobs:
         $CHROOT_PARAMS systemctl mask xrdp
         $CHROOT_PARAMS systemctl mask systemd-resolved.service
         $CHROOT_PARAMS systemctl mask tftpd-hpa.service
+        
 
+        KALI_RELEASE_NAME="kali-maaaaz-edition-$(date '+%Y%m%d')"
+        echo "KALI_RELEASE_NAME=$KALI_RELEASE_NAME" >> $GITHUB_ENV
+        
         # list installed packages
-        KALI_RELEASE_PACKAGE_LIST_FILE="/tmp/installed_packages.txt"
+        KALI_RELEASE_PACKAGE_LIST_FILE="/tmp/$KALI_RELEASE_NAME-installed_packages.txt"
         echo "KALI_RELEASE_PACKAGE_LIST_FILE=$KALI_RELEASE_PACKAGE_LIST_FILE" >> $GITHUB_ENV
         
         ($CHROOT_PARAMS dpkg -l | grep '^ii' | awk '{print $2 "\t" $3}' | column -t) > $KALI_RELEASE_PACKAGE_LIST_FILE
@@ -215,21 +223,24 @@ jobs:
         sudo vboxmanage modifymedium --compact "$KALI_VDI_FULL_PATH"
         sudo ls -alh $KALI_VDI_FULL_PATH
 
-    - name: Create a 7z release file and upload it on archive.org
+    - name: Create a 7z release file
       run: |
         set -xe
 
         cd /mnt/
-        KALI_RELEASE_SHA256SUM_FILE="$VDI_ROOT/$KALI_BASE_NAME-maaaaz-edition-$(date '+%Y%m%d')-sha256sum.txt"
-        KALI_RELEASE_7Z_FILE="$VDI_ROOT/$KALI_BASE_NAME-maaaaz-edition-$(date '+%Y%m%d').7z"
+        
+        KALI_RELEASE_SHA256SUM_FILE="$VDI_ROOT/$KALI_RELEASE_NAME-sha256sum.txt"
+        echo "KALI_RELEASE_SHA256SUM_FILE=$KALI_RELEASE_SHA256SUM_FILE" >> $GITHUB_ENV
+        
+        KALI_RELEASE_7Z_FILE="$VDI_ROOT/$KALI_RELEASE_NAME.7z"
+        echo "KALI_RELEASE_7Z_FILE=$KALI_RELEASE_7Z_FILE" >> $GITHUB_ENV
+        
         time sudo 7z a "$KALI_RELEASE_7Z_FILE" "$KALI_VDI_FULL_PATH"
         sudo ls -alh $KALI_RELEASE_7Z_FILE
         
         time sha256sum --tag $KALI_RELEASE_7Z_FILE | sudo tee $KALI_RELEASE_SHA256SUM_FILE
         sudo ls -alh $KALI_RELEASE_SHA256SUM_FILE
-        
-        echo "KALI_RELEASE_SHA256SUM_FILE=$KALI_RELEASE_SHA256SUM_FILE" >> $GITHUB_ENV
-        echo "KALI_RELEASE_7Z_FILE=$KALI_RELEASE_7Z_FILE" >> $GITHUB_ENV
+
 
     - name: Create a new release and upload it on archive.org
       env:   
@@ -242,4 +253,17 @@ jobs:
         wget -nv "https://archive.org/download/ia-pex/ia" -O "./ia"
         chmod +x "./ia"
         ./ia configure --username=$SECRET_ARCHIVE_ORG_LOGIN --password=$SECRET_ARCHIVE_ORG_PASSWORD
-        ./ia upload kalimaaaazedition $KALI_RELEASE_7Z_FILE --metadata="mediatype:software"
+        
+        ./ia upload $KALI_RELEASE_NAME $KALI_RELEASE_PACKAGE_LIST_FILE --metadata="mediatype:texts"
+        ./ia upload $KALI_RELEASE_NAME $KALI_RELEASE_SHA256SUM_FILE --metadata="mediatype:texts"
+        ./ia upload $KALI_RELEASE_NAME $KALI_RELEASE_7Z_FILE --metadata="mediatype:software"
+    
+    - name: Create a new release
+      uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 #v0.1.15
+      with:
+        body_path: ${{ env.KALI_RELEASE_SHA256SUM_FILE }}
+        name: ${{ env.KALI_RELEASE_NAME }}
+        tag_name: ${{ env.KALI_RELEASE_NAME }}
+        files: |
+          ${{ env.KALI_RELEASE_SHA256SUM_FILE }}
+          ${{ env.KALI_RELEASE_PACKAGE_LIST_FILE }}
