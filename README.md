@@ -26,7 +26,7 @@ Releases
   - `archive.org` accept larger files than the Github release feature one (2 GB, which is not enough)
   - `archive.org` provide multiple downloading capacities: direct download, torrent etc.
   - `archive.org` is an awesome project
-- Release file are 7 GB compressed | 25 GB decompressed
+- Release file are **7 GB compressed | 25 GB decompressed**
 
 Changelog
 ---------
