@@ -185,6 +185,7 @@ jobs:
         $CHROOT_PARAMS systemctl mask xrdp
         $CHROOT_PARAMS systemctl mask systemd-resolved.service
         $CHROOT_PARAMS systemctl mask tftpd-hpa.service
+        $CHROOT_PARAMS systemctl disable sysmon.service
 
         KALI_RELEASE_NAME="kali-maaaaz-edition-$(date '+%Y%m%d')"
         echo "KALI_RELEASE_NAME=$KALI_RELEASE_NAME" >> $GITHUB_ENV
