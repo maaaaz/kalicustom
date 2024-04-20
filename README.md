@@ -3,7 +3,7 @@ Kali custom
 
 Description
 -----------
-Some Kali VM builds with customizations
+Some Kali VM builds based on the official Kali VM builds (https://www.kali.org/get-kali/#kali-virtual-machines) but with customizations
 
 Additions
 ---------
