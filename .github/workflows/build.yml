@@ -266,7 +266,7 @@ jobs:
         
     
     - name: Create a new Github release
-      uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 #v0.1.15
+      uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564 #v2.0.4
       with:
         body_path: ${{ env.KALI_RELEASE_NOTES }}
         name: ${{ env.KALI_RELEASE_NAME }}
