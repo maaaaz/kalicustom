@@ -22,7 +22,7 @@ Everything is documented in the [build workflow](https://github.com/maaaaz/Kalic
 Releases
 ---------
 - See https://github.com/maaaaz/Kalicustom/releases
-- Releases are hosted on `archive.org` because:
+- Releases are hosted on `archive.org` (https://archive.org/details/@maaaaz/) because:
   - `archive.org` accept larger files than the Github release feature one (2 GB, which is not enough)
   - `archive.org` provide multiple downloading capacities: direct download, torrent etc.
   - `archive.org` is an awesome project
