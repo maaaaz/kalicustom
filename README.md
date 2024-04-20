@@ -16,7 +16,7 @@ Everything is documented in the [build workflow](https://github.com/maaaaz/Kalic
 - A friendlier [`.vimrc`](https://github.com/maaaaz/dotfiles/blob/master/.vimrc) in the `root` and `kali` homes
 - VMWare and VirtualBox compatibility
 - Virtualbox permission fix by adding the `kali` to the `vboxsf` group
-- A Python `venvcommon` virtualenv (in the root home), with common infosec Python packages
+- A Python `venvcommon` virtualenv (in the `root` home, use `workon venvcommon`), containing [common infosec Python packages](https://github.com/maaaaz/dotfiles/blob/master/python_common.txt)
 - azerty keymap and France timezone (sorry, I am french), but you can easily change these settings after
 
 Releases
