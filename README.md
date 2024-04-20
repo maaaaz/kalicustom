@@ -12,6 +12,7 @@ Everything is documented in the [Github action build workflow](https://github.co
   - https://github.com/maaaaz/dotfiles/blob/master/debian_ubuntu_packages.txt
   - https://github.com/maaaaz/dotfiles/blob/master/kali_missing_packages.txt
   - Microsoft Sysmon and ProcDump for Linux
+  - [Escobar](https://github.com/savely-krasovsky/escobar)
 - Bash as default shell
 - A friendlier [`.vimrc`](https://github.com/maaaaz/dotfiles/blob/master/.vimrc) in the `root` and `kali` homes
 - VMWare and VirtualBox compatibility
