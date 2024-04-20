@@ -15,7 +15,7 @@ Everything is documented in the [Github action build workflow](https://github.co
 - Bash as default shell
 - A friendlier [`.vimrc`](https://github.com/maaaaz/dotfiles/blob/master/.vimrc) in the `root` and `kali` homes
 - VMWare and VirtualBox compatibility
-- Virtualbox permission fix by adding the `kali` to the `vboxsf` group
+- Virtualbox permission fix by adding the `kali` user to the `vboxsf` group
 - A Python `venvcommon` virtualenv (in the `root` home, use `workon venvcommon`), containing [common infosec Python packages](https://github.com/maaaaz/dotfiles/blob/master/python_common.txt)
 - azerty keymap and France timezone (sorry, I am french), but you can easily change these settings after
 
@@ -24,9 +24,9 @@ Releases
 - See https://github.com/maaaaz/Kalicustom/releases
 - Releases are hosted on `archive.org` (https://archive.org/details/@maaaaz/) because:
   - `archive.org` accept larger files than the Github release feature one (2 GB, which is not enough)
-  - `archive.org` provide multiple downloading capacities: direct download, torrent etc.
+  - `archive.org` provide multiple useful downloading capabilities: direct download, torrent etc.
   - `archive.org` is an awesome project
-- Release file are **7 GB compressed | 25 GB decompressed**
+- Release files are **7 GB compressed | 25 GB decompressed**
 
 Changelog
 ---------
