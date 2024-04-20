@@ -3,7 +3,7 @@ Kali custom
 
 Description
 -----------
-Some Kali VM builds based on the official Kali VM builds (https://www.kali.org/get-kali/#kali-virtual-machines) but with customizations
+Some Kali VM builds, based on the [official Kali VM builds](https://www.kali.org/get-kali/#kali-virtual-machines), but with customizations
 
 Additions
 ---------
@@ -24,8 +24,8 @@ Releases
 ---------
 - See https://github.com/maaaaz/Kalicustom/releases
 - Releases are hosted on `archive.org` (https://archive.org/details/@maaaaz/) because:
-  - `archive.org` accept larger files than the Github release feature one (2 GB, which is not enough)
-  - `archive.org` provide multiple useful downloading capabilities: direct download, torrent etc.
+  - `archive.org` accepts larger files than the Github release feature one (2 GB, which is not enough)
+  - `archive.org` provides multiple useful downloading capabilities: direct download, torrent etc.
   - `archive.org` is an awesome project
 - Release files are **7 GB compressed | 25 GB decompressed**
 
