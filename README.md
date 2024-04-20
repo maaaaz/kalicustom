@@ -13,7 +13,7 @@ Everything is documented in the [build workflow](https://github.com/maaaaz/Kalic
   - https://github.com/maaaaz/dotfiles/blob/master/kali_missing_packages.txt
   - Microsoft Sysmon and ProcDump for Linux
 - Bash as default shell
-- A friendlier `.vimrc` in the `root` and `kali` homes
+- A friendlier [`.vimrc`](https://github.com/maaaaz/dotfiles/blob/master/.vimrc) in the `root` and `kali` homes
 - VMWare and VirtualBox compatibility
 - Virtualbox permission fix by adding the `kali` to the `vboxsf` group
 - A Python `venvcommon` virtualenv (in the root home), with common infosec Python packages
