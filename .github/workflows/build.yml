@@ -124,6 +124,13 @@ jobs:
         wget -nv 'https://raw.githubusercontent.com/maaaaz/dotfiles/master/debian_ubuntu_packages.txt' -O '/tmp/debian_ubuntu_packages.txt'
         $CHROOT_PARAMS $APT_PARAMS_VDI install $(cat '/tmp/debian_ubuntu_packages.txt')
 
+        # sysmon and procdump (and procmon when it will be packaged for Debian)
+        $CHROOT_PARAMS wget -nv 'https://packages.microsoft.com/debian/12/prod/pool/main/s/sysmonforlinux/sysmonforlinux_1.3.2_amd64.deb' -O '/tmp/sysmonforlinux_1.3.2_amd64.deb'
+        $CHROOT_PARAMS dpkg -i '/tmp/sysmonforlinux_1.3.2_amd64.deb'
+        
+        $CHROOT_PARAMS wget -nv 'https://packages.microsoft.com/debian/12/prod/pool/main/p/procdump/procdump_3.2.0_amd64.deb' -O '/tmp/procdump_3.2.0_amd64.deb'
+        $CHROOT_PARAMS dpkg -i '/tmp/procdump_3.2.0_amd64.deb'      
+
         # install non-packaged useful tools
         $CHROOT_PARAMS mkdir -p /opt/escobar/
         $CHROOT_PARAMS wget -nv 'https://github.com/savely-krasovsky/escobar/releases/download/v3.0.1/escobar-3.0.1-linux-amd64.tar.gz' -O '/opt/escobar/escobar-3.0.1-linux-amd64.tar.gz'
@@ -137,7 +144,7 @@ jobs:
       run: |
         set -xe
         # full-upgrade of packages
-        #$CHROOT_PARAMS $APT_PARAMS_VDI full-upgrade
+        $CHROOT_PARAMS $APT_PARAMS_VDI full-upgrade
 
         # clean apt
         $CHROOT_PARAMS $APT_PARAMS_VDI autoremove --purge
@@ -243,11 +250,11 @@ jobs:
         cd /tmp/
         wget -nv "https://archive.org/download/ia-pex/ia" -O "./ia"
         chmod +x "./ia"
-        #./ia configure --username=$SECRET_ARCHIVE_ORG_LOGIN --password=$SECRET_ARCHIVE_ORG_PASSWORD
+        ./ia configure --username=$SECRET_ARCHIVE_ORG_LOGIN --password=$SECRET_ARCHIVE_ORG_PASSWORD
         
-        #./ia upload $KALI_RELEASE_NAME $KALI_RELEASE_PACKAGE_LIST_FILE --metadata="mediatype:texts"
-        #./ia upload $KALI_RELEASE_NAME $KALI_RELEASE_SHA256SUM_FILE --metadata="mediatype:texts"
-        #./ia upload $KALI_RELEASE_NAME $KALI_RELEASE_7Z_FILE --metadata="mediatype:software"
+        ./ia upload $KALI_RELEASE_NAME $KALI_RELEASE_PACKAGE_LIST_FILE --metadata="mediatype:texts"
+        ./ia upload $KALI_RELEASE_NAME $KALI_RELEASE_SHA256SUM_FILE --metadata="mediatype:texts"
+        ./ia upload $KALI_RELEASE_NAME $KALI_RELEASE_7Z_FILE --metadata="mediatype:software"
 
         KALI_RELEASE_NOTES="/tmp/$KALI_RELEASE_NAME-notes.txt"
         echo "KALI_RELEASE_NOTES=$KALI_RELEASE_NOTES" >> $GITHUB_ENV
