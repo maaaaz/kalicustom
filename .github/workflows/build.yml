@@ -82,7 +82,8 @@ jobs:
         set -xe
         cd /tmp/
         
-        CHROOT_PARAMS="env DEBIAN_FRONTEND=noninteractive sudo --preserve-env chroot $VDI_ROOT/"
+        #CHROOT_PARAMS="env DEBIAN_FRONTEND=noninteractive sudo --preserve-env chroot $VDI_ROOT/"
+        CHROOT_PARAMS="env DEBIAN_FRONTEND=noninteractive sudo chroot $VDI_ROOT/"
         APT_PARAMS_VDI="apt -y -q -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold"
 
         echo "CHROOT_PARAMS=$CHROOT_PARAMS" >> $GITHUB_ENV
