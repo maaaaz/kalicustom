@@ -159,7 +159,7 @@ jobs:
         $CHROOT_PARAMS su root -c "($venv_home) && ($venv_python) && ($venv_wrapper)"
         $CHROOT_PARAMS su kali -c "($venv_home) && ($venv_python) && ($venv_wrapper)"
         
-        $CHROOT_PARAMS bash -c "WORKON_HOME=~/.virtualenvs VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3 && source /usr/share/virtualenvwrapper/virtualenvwrapper.sh && mkvirtualenv -p python3 venvcommon && workon venvcommon && wget -nv 'https://github.com/maaaaz/dotfiles/raw/master/python_common.txt' -O '/tmp/python_common.txt' && pip3 install -q -r '/tmp/python_common.txt'"
+        $CHROOT_PARAMS bash -c "WORKON_HOME=~/.virtualenvs VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3 && source /usr/share/virtualenvwrapper/virtualenvwrapper.sh && mkvirtualenv -p python3 venvcommon && workon venvcommon && wget -nv 'https://github.com/maaaaz/dotfiles/raw/master/python_common.txt' -O '/tmp/python_common.txt' && pip3 install -r '/tmp/python_common.txt'"
 
     - name: Customize the VDI file of the VM - disable services
       run: |
