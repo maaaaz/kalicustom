@@ -1,6 +1,17 @@
 name: Kali VM customization build script (VMDK)
 
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+      inputs:
+        VM_URL:
+          description: URL of the .7z Kali VM
+          required: true
+          default: https://cdimage.kali.org/kali-2024.1/kali-linux-2024.1-virtualbox-amd64.7z
+        
+        VM_HASH:
+          description: Expected SHA256 hash 
+          required: true
+          default: 80ba5fdd6037f9261a5f49a7f18a0abb231551a1aec2d97da2344c2a0e72ced8
 
 permissions:
   contents: write
@@ -26,8 +37,11 @@ jobs:
 
         sudo mkdir -p /mnt/source
         cd /mnt/source/
-        KALI_BASE_ZIP_URL="https://cdimage.kali.org/kali-2024.1/kali-linux-2024.1-virtualbox-amd64.7z"
-        KALI_SHA256="80ba5fdd6037f9261a5f49a7f18a0abb231551a1aec2d97da2344c2a0e72ced8"
+        #KALI_BASE_ZIP_URL="https://cdimage.kali.org/kali-2024.1/kali-linux-2024.1-virtualbox-amd64.7z"
+        KALI_BASE_ZIP_URL="${{ github.event.inputs.VM_URL }}"
+        
+        #KALI_SHA256="80ba5fdd6037f9261a5f49a7f18a0abb231551a1aec2d97da2344c2a0e72ced8"
+        KALI_SHA256="${{ github.event.inputs.VM_HASH }}"
         
         ## testing and debugging ##
         #KALI_BASE_ZIP_URL="http://downloads.sourceforge.net/virtualboximage/debian-3.1r0a-x86-netinstall-2.7z"
@@ -52,7 +66,7 @@ jobs:
         time sudo 7z l "$KALI_BASE_FULL_PATH"
         time sudo 7z e "$KALI_BASE_FULL_PATH" "-o$KALI_EXTRACTED_VDI_DIR" *.vdi -r
         
-        mv "$KALI_EXTRACTED_VDI_DIR$KALI_BASE_NAME_OLD.vdi" "$KALI_EXTRACTED_VDI_DIR$KALI_BASE_NAME.vdi"
+        sudo mv "$KALI_EXTRACTED_VDI_DIR$KALI_BASE_NAME_OLD.vdi" "$KALI_EXTRACTED_VDI_DIR$KALI_BASE_NAME.vdi"
         
         KALI_VDI_FULL_FNAME=$(basename "$KALI_EXTRACTED_VDI_DIR$KALI_BASE_NAME.vdi")
         KALI_VDI_FULL_PATH=$(readlink -f $KALI_VDI_FULL_FNAME)
