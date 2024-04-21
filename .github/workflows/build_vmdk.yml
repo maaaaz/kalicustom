@@ -80,6 +80,7 @@ jobs:
         echo "KALI_VDI_FULL_FNAME=$KALI_VDI_FULL_FNAME" >> $GITHUB_ENV
         echo "KALI_VDI_FULL_PATH=$KALI_VDI_FULL_PATH" >> $GITHUB_ENV
         echo "KALI_VMDK_FULL_FNAME=$KALI_VMDK_FULL_FNAME" >> $GITHUB_ENV
+        echo "KALI_VMDK_FULL_PATH=$KALI_VMDK_FULL_PATH" >> $GITHUB_ENV
         
     - name: Prepare environment 
       run: |
