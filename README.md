@@ -31,7 +31,7 @@ Releases
 
 Changelog
 ---------
-2024-04-20: first release
+2024-04-21: first release
 
 Copyright and license
 ---------------------
