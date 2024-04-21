@@ -35,7 +35,8 @@ jobs:
         
         KALI_BASE_FULL_FNAME=$(basename $KALI_BASE_ZIP_URL)
         KALI_BASE_FULL_PATH=$(readlink -f $KALI_BASE_FULL_FNAME)
-        KALI_BASE_NAME=$(basename $KALI_BASE_FULL_FNAME .7z)
+        KALI_BASE_NAME_OLD=$(basename $KALI_BASE_FULL_FNAME .7z)
+        KALI_BASE_NAME=$(basename $KALI_BASE_FULL_FNAME .7z | sed 's/-virtualbox//g')
 
         # downloading
         time sudo axel -q $KALI_BASE_ZIP_URL -o $KALI_BASE_FULL_FNAME
@@ -50,8 +51,12 @@ jobs:
         cd $KALI_EXTRACTED_VDI_DIR
         time sudo 7z l "$KALI_BASE_FULL_PATH"
         time sudo 7z e "$KALI_BASE_FULL_PATH" "-o$KALI_EXTRACTED_VDI_DIR" *.vdi -r
+        
+        mv "$KALI_EXTRACTED_VDI_DIR$KALI_BASE_NAME_OLD.vdi" "$KALI_EXTRACTED_VDI_DIR$KALI_BASE_NAME.vdi"
+        
         KALI_VDI_FULL_FNAME=$(basename "$KALI_EXTRACTED_VDI_DIR$KALI_BASE_NAME.vdi")
         KALI_VDI_FULL_PATH=$(readlink -f $KALI_VDI_FULL_FNAME)
+        
         KALI_VMDK_FULL_FNAME=$(basename "$KALI_EXTRACTED_VDI_DIR$KALI_BASE_NAME.vmdk")      
         KALI_VMDK_FULL_PATH=$(readlink -f $KALI_VMDK_FULL_FNAME)
 
