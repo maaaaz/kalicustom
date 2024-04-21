@@ -37,10 +37,7 @@ jobs:
 
         sudo mkdir -p /mnt/source
         cd /mnt/source/
-        #KALI_BASE_ZIP_URL="https://cdimage.kali.org/kali-2024.1/kali-linux-2024.1-virtualbox-amd64.7z"
         KALI_BASE_ZIP_URL="${{ github.event.inputs.VM_URL }}"
-        
-        #KALI_SHA256="80ba5fdd6037f9261a5f49a7f18a0abb231551a1aec2d97da2344c2a0e72ced8"
         KALI_SHA256="${{ github.event.inputs.VM_HASH }}"
         
         ## testing and debugging ##
