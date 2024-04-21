@@ -248,6 +248,8 @@ jobs:
         sudo vboxmanage clonemedium --format vmdk "$KALI_VDI_FULL_PATH" "$KALI_VMDK_FULL_PATH"
         sudo ls -alh $KALI_VMDK_FULL_PATH
 
+        sudo rm -rf "$KALI_VDI_FULL_PATH"
+
     - name: Create a 7z release file
       run: |
         set -xe
