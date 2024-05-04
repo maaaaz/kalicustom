@@ -31,6 +31,10 @@ jobs:
         APT_PARAMS='sudo apt -y -qq -o=Dpkg::Use-Pty=0'
         $APT_PARAMS update && $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils axel virtualbox
 
+        cd /tmp/
+        wget -nv "https://archive.org/download/ia-pex/ia" -O "./ia"
+        chmod +x "./ia"
+
     - name: Download the VM
       run: |
         set -xe
@@ -278,8 +282,6 @@ jobs:
         set -xe
         
         cd /tmp/
-        wget -nv "https://archive.org/download/ia-pex/ia" -O "./ia"
-        chmod +x "./ia"
         ./ia configure --username=$SECRET_ARCHIVE_ORG_LOGIN --password=$SECRET_ARCHIVE_ORG_PASSWORD
         
         ./ia upload $KALI_RELEASE_NAME $KALI_RELEASE_PACKAGE_LIST_FILE --metadata="mediatype:texts"
