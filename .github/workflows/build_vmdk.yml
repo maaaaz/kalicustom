@@ -243,7 +243,7 @@ jobs:
         findmnt
         echo
 
-    - name: Compact the VDI file
+    - name: Compact the VDI file and convert to VMDK
       run: |
         set -xe
         
