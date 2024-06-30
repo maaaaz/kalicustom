@@ -1,4 +1,5 @@
 #!/bin/sh
+# it should go there: ./live-build-config/kali-config/common/includes.chroot/usr/lib/live/config/0031-kali-user-setup
 
 configure_zsh() {
     # Stop if zsh is not present
