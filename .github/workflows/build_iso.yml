@@ -48,6 +48,8 @@ jobs:
         wget -nv "https://archive.org/download/ia-pex/ia" -O "./ia"
         sudo chmod +x "./ia"
 
+        wget -nv "https://github.com/maaaaz/dotfiles/raw/master/.vimrc" -O ".vimrc"
+
     - name: Prepare environment
       run: |
         set -xe
@@ -60,13 +62,17 @@ jobs:
         cd /mnt/
         sudo git clone https://gitlab.com/kalilinux/build-scripts/live-build-config.git live-build-config
 
+        # executing chrooted scripts
         sudo cp -f $GITHUB_WORKSPACE/_resources/customization.chroot /mnt/live-build-config/kali-config/common/hooks/live/customization.chroot
         sudo cp -f $GITHUB_WORKSPACE/_resources/0031-kali-user-setup /mnt/live-build-config/kali-config/common/includes.chroot/usr/lib/live/config/0031-kali-user-setup
         sudo cp -f $GITHUB_WORKSPACE/_resources/inputrc /mnt/live-build-config/kali-config/common/includes.chroot/etc/inputrc
         sudo cp -f $GITHUB_WORKSPACE/_resources/splash.png /mnt/live-build-config/kali-config/common/bootloaders/grub-pc/splash.png
 
+        # placing files in ISO
         sudo mkdir -p /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.config/qterminal.org/
         sudo cp -f $GITHUB_WORKSPACE/_resources/qterminal.ini /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.config/qterminal.org/qterminal.ini
+
+        sudo cp -f /tmp/.vimrc /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.vimrc
 
     - name: Build the image
       run: |
