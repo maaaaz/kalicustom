@@ -19,6 +19,13 @@ configure_bash() {
     chsh --shell /usr/bin/bash root
 }
 
+configure_custom(){
+    wget -nv "https://github.com/maaaaz/dotfiles/raw/master/.vimrc" -O "/root/.vimrc"
+    su kali -c "wget -nv 'https://github.com/maaaaz/dotfiles/raw/master/.vimrc' -O '/home/kali/.vimrc'"
+    rm -rf /etc/localtime
+    ln -s /usr/share/zoneinfo/Europe/Paris /etc/localtime
+}
+
 configure_usergroups() {
     # Ensure those groups exist
     addgroup --system kaboxer || true
@@ -51,6 +58,9 @@ configure_bash
 
 # Add kali user to additional groups
 configure_usergroups
+
+# customization
+configure_custom
 
 # Remember that this script has been run
 touch /var/lib/live/config/kali-user-setup
