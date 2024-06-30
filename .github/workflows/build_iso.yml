@@ -62,16 +62,18 @@ jobs:
         cd /mnt/
         sudo git clone https://gitlab.com/kalilinux/build-scripts/live-build-config.git live-build-config
 
+
+        # changing boot splashscreen
+        sudo cp -f $GITHUB_WORKSPACE/_resources/splash.png /mnt/live-build-config/kali-config/common/bootloaders/grub-pc/splash.png
+        
         # executing chrooted scripts
         sudo cp -f $GITHUB_WORKSPACE/_resources/customization.chroot /mnt/live-build-config/kali-config/common/hooks/live/customization.chroot
         sudo cp -f $GITHUB_WORKSPACE/_resources/0031-kali-user-setup /mnt/live-build-config/kali-config/common/includes.chroot/usr/lib/live/config/0031-kali-user-setup
-        sudo cp -f $GITHUB_WORKSPACE/_resources/inputrc /mnt/live-build-config/kali-config/common/includes.chroot/etc/inputrc
-        sudo cp -f $GITHUB_WORKSPACE/_resources/splash.png /mnt/live-build-config/kali-config/common/bootloaders/grub-pc/splash.png
+        sudo cp -f $GITHUB_WORKSPACE/_resources/inputrc /mnt/live-build-config/kali-config/common/includes.chroot/etc/inputrc       
 
-        # placing files in ISO
+        # placing files in the ISO
         sudo mkdir -p /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.config/qterminal.org/
         sudo cp -f $GITHUB_WORKSPACE/_resources/qterminal.ini /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.config/qterminal.org/qterminal.ini
-
         sudo cp -f /tmp/.vimrc /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.vimrc
 
     - name: Build the image
