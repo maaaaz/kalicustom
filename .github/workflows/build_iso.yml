@@ -62,7 +62,6 @@ jobs:
         cd /mnt/
         sudo git clone https://gitlab.com/kalilinux/build-scripts/live-build-config.git live-build-config
 
-
         # changing boot splashscreen
         sudo cp -f $GITHUB_WORKSPACE/_resources/splash.png /mnt/live-build-config/kali-config/common/bootloaders/grub-pc/splash.png
         
