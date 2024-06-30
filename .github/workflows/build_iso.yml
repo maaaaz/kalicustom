@@ -80,4 +80,4 @@ jobs:
         set -xe
 
         cd /mnt/live-build-config/
-        sudo ./build.sh --verbose
+        sudo ./build.sh --verbose --variant xfce
