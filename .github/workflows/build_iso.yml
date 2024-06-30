@@ -33,7 +33,8 @@ jobs:
         $APT_PARAMS update && $APT_PARAMS install git live-build simple-cdd cdebootstrap curl
 
         cd /tmp/
-        
+
+        #################################################################################################################
         # patching debootstrap because it is buggy on Ubuntu Jammy 22.04
         wget -nv "http://ports.ubuntu.com/pool/main/d/debootstrap/debootstrap_1.0.134ubuntu1_all.deb" -O debootstrap.deb
         sudo dpkg -i ./debootstrap.deb
