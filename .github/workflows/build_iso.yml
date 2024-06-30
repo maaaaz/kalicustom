@@ -56,7 +56,7 @@ jobs:
         cd /mnt/
         sudo git clone https://gitlab.com/kalilinux/build-scripts/live-build-config.git live-build-config
 
-        sudo cp -f $GITHUB_WORKSPACE/_resources/customization.sh /mnt/live-build-config/kali-config/variant-xfce/hooks/live/customization.sh
+        sudo cp -f $GITHUB_WORKSPACE/_resources/customization.chroot /mnt/live-build-config/kali-config/variant-xfce/hooks/live/customization.chroot
         sudo cp -f $GITHUB_WORKSPACE/_resources/0031-kali-user-setup /mnt/live-build-config/kali-config/common/includes.chroot/usr/lib/live/config/0031-kali-user-setup
         sudo cp -f $GITHUB_WORKSPACE/_resources/splash.png /mnt/live-build-config/kali-config/common/bootloaders/grub-pc/splash.png
 
