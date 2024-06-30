@@ -33,8 +33,11 @@ jobs:
         $APT_PARAMS update && $APT_PARAMS install git live-build simple-cdd cdebootstrap curl
 
         cd /tmp/
+        
+        # patching debootstrap because it is buggy on Ubuntu Jammy 22.04
         wget -nv "http://ports.ubuntu.com/pool/main/d/debootstrap/debootstrap_1.0.134ubuntu1_all.deb" -O debootstrap.deb
         sudo dpkg -i ./debootstrap.deb
+        #################################################################################################################
 
         wget -nv "https://http.kali.org/pool/main/l/live-build/live-build_20230502%2Bkali3_all.deb" -O live_build.deb
         wget -nv "https://http.kali.org/pool/main/k/kali-archive-keyring/kali-archive-keyring_2024.1_all.deb" -O kali_keyring.deb
