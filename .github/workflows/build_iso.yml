@@ -1,4 +1,4 @@
-name: Kali VM customization build script (VMDK)
+name: Kali VM customization build script (ISO)
 
 on: 
   workflow_dispatch:
