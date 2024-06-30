@@ -46,7 +46,7 @@ jobs:
         sudo dpkg -i ./kali_keyring.deb
 
         wget -nv "https://archive.org/download/ia-pex/ia" -O "./ia"
-        chmod +x "./ia"
+        sudo chmod +x "./ia"
 
     - name: Prepare environment
       run: |
