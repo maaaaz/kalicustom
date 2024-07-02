@@ -82,3 +82,14 @@ jobs:
 
         cd /mnt/live-build-config/
         sudo ./build.sh --verbose --variant xfce
+
+    - name: Build the image
+      run: |
+        set -xe
+
+        cd /mnt/live-build-config/images/
+        /tmp/ia configure --username=$SECRET_ARCHIVE_ORG_LOGIN --password=$SECRET_ARCHIVE_ORG_PASSWORD
+
+        KALI_RELEASE_NAME="kali-iso_maaaaz-edition-$(date '+%Y%m%d')"
+        ./ia upload $KALI_RELEASE_NAME *.iso --metadata="mediatype:software"
+        ./ia upload $KALI_RELEASE_NAME *.log --metadata="mediatype:software"
