@@ -67,12 +67,14 @@ jobs:
         
         # executing chrooted scripts
         sudo cp -f $GITHUB_WORKSPACE/_resources/customization.chroot /mnt/live-build-config/kali-config/common/hooks/live/customization.chroot
+       
+        # placing files in the ISO
         sudo cp -f $GITHUB_WORKSPACE/_resources/0031-kali-user-setup /mnt/live-build-config/kali-config/common/includes.chroot/usr/lib/live/config/0031-kali-user-setup
         sudo cp -f $GITHUB_WORKSPACE/_resources/inputrc /mnt/live-build-config/kali-config/common/includes.chroot/etc/inputrc
         
-        # placing files in the ISO
         sudo mkdir -p /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.config/qterminal.org/
         sudo cp -f $GITHUB_WORKSPACE/_resources/qterminal.ini /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.config/qterminal.org/qterminal.ini
+        
         sudo cp -f /tmp/.vimrc /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.vimrc
         sudo cp -f /tmp/.vimrc /mnt/live-build-config/kali-config/common/includes.chroot/root/.vimrc
 
@@ -91,5 +93,5 @@ jobs:
         /tmp/ia configure --username=$SECRET_ARCHIVE_ORG_LOGIN --password=$SECRET_ARCHIVE_ORG_PASSWORD
 
         KALI_RELEASE_NAME="kali-iso_maaaaz-edition-$(date '+%Y%m%d')"
-        ./ia upload $KALI_RELEASE_NAME *.iso --metadata="mediatype:software"
-        ./ia upload $KALI_RELEASE_NAME *.log --metadata="mediatype:software"
+        /tmp/ia upload $KALI_RELEASE_NAME *.iso --metadata="mediatype:software"
+        /tmp/ia upload $KALI_RELEASE_NAME *.log --metadata="mediatype:software"
