@@ -1,5 +1,6 @@
 #!/bin/sh
 
+echo "[+] maaaaz: starting customization"
 APT_PARAMS="apt -y -qq -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold"
 $APT_PARAMS update
 
@@ -56,3 +57,5 @@ systemctl mask rpcbind
 systemctl mask xrdp
 systemctl mask systemd-resolved.service
 systemctl mask tftpd-hpa.service
+
+echo "[+] maaaaz: customization finished"
