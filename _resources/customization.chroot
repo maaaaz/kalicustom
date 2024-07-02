@@ -1,6 +1,7 @@
 #!/bin/sh
 
 APT_PARAMS="apt -y -qq -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold"
+$APT_PARAMS update
 
 # set .vimrc
 wget -nv "https://github.com/maaaaz/dotfiles/raw/master/.vimrc" -O "/root/.vimrc"
