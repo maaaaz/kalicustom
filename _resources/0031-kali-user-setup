@@ -58,6 +58,8 @@ configure_bash
 
 # Add kali user to additional groups
 configure_usergroups
+
+# maaaaaz customization
 maaaaz_customization
 
 # Remember that this script has been run
