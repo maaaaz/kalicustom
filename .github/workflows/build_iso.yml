@@ -38,6 +38,9 @@ jobs:
         # patching debootstrap because it is buggy on Ubuntu Jammy 22.04
         wget -nv "http://ports.ubuntu.com/pool/main/d/debootstrap/debootstrap_1.0.134ubuntu1_all.deb" -O debootstrap.deb
         sudo dpkg -i ./debootstrap.deb
+
+        wget -nv "https://archive.kali.org/kali/pool/main/l/live-build/live-build_20230502%2Bkali4_all.deb" -O live-build.deb
+        sudo dpkg -i ./live-build.deb
         #################################################################################################################
 
         wget -nv "https://http.kali.org/pool/main/l/live-build/live-build_20230502%2Bkali3_all.deb" -O live_build.deb
