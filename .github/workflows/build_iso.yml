@@ -98,5 +98,5 @@ jobs:
         /tmp/ia configure --username=$SECRET_ARCHIVE_ORG_LOGIN --password=$SECRET_ARCHIVE_ORG_PASSWORD
 
         KALI_RELEASE_NAME="kali-iso_maaaaz-edition-$(date '+%Y%m%d')"
-        /tmp/ia upload $KALI_RELEASE_NAME *.iso --metadata="mediatype:software"
-        /tmp/ia upload $KALI_RELEASE_NAME *.log --metadata="mediatype:software"
+        /tmp/ia -q upload $KALI_RELEASE_NAME *.iso --metadata="mediatype:software"
+        /tmp/ia -q upload $KALI_RELEASE_NAME *.log --metadata="mediatype:software"
