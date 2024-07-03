@@ -80,14 +80,14 @@ jobs:
         sudo mkdir -p /mnt/live-build-config/kali-config/common/includes.chroot/root/
         sudo cp -f /tmp/.vimrc /mnt/live-build-config/kali-config/common/includes.chroot/root/.vimrc
 
-    - name: Push to archive.org
+    - name: Build the image
       run: |
         set -xe
         
         cd /mnt/live-build-config/
         sudo ./build.sh --verbose --variant xfce
 
-    - name: Build the image
+    - name: Push to archive.org
       env:   
         SECRET_ARCHIVE_ORG_LOGIN: ${{ secrets.SECRET_ARCHIVE_ORG_LOGIN }}
         SECRET_ARCHIVE_ORG_PASSWORD: ${{ secrets.SECRET_ARCHIVE_ORG_PASSWORD }}
