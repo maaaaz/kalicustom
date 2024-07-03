@@ -40,7 +40,7 @@ jobs:
         sudo dpkg -i ./debootstrap.deb
         #################################################################################################################
 
-        wget -nv "https://http.kali.org/pool/main/l/live-build/live-build_20230502%2Bkali3_all.deb" -O live_build.deb
+        wget -nv "https://archive.kali.org/kali/pool/main/l/live-build/live-build_20230502%2Bkali4_all.deb" -O live_build.deb
         wget -nv "https://http.kali.org/pool/main/k/kali-archive-keyring/kali-archive-keyring_2024.1_all.deb" -O kali_keyring.deb
         sudo dpkg -i ./live_build.deb
         sudo dpkg -i ./kali_keyring.deb
@@ -53,11 +53,7 @@ jobs:
     - name: Prepare environment
       run: |
         set -xe
-
-        cd /tmp/
-        wget -nv "https://archive.kali.org/kali/pool/main/l/live-build/live-build_20230502%2Bkali4_all.deb" -O live-build.deb
-        sudo dpkg -i ./live-build.deb
-
+        
         cd /usr/share/debootstrap/scripts/
         (echo "default_mirror http://http.kali.org/kali"; sed -e "s/debian-archive-keyring.gpg/kali-archive-keyring.gpg/g" sid) > /tmp/kali
         sudo mv /tmp/kali .
@@ -84,7 +80,7 @@ jobs:
         sudo mkdir -p /mnt/live-build-config/kali-config/common/includes.chroot/root/
         sudo cp -f /tmp/.vimrc /mnt/live-build-config/kali-config/common/includes.chroot/root/.vimrc
 
-    - name: Build the image
+    - name: Push to archive.org
       run: |
         set -xe
         
@@ -92,6 +88,9 @@ jobs:
         sudo ./build.sh --verbose --variant xfce
 
     - name: Build the image
+      env:   
+        SECRET_ARCHIVE_ORG_LOGIN: ${{ secrets.SECRET_ARCHIVE_ORG_LOGIN }}
+        SECRET_ARCHIVE_ORG_PASSWORD: ${{ secrets.SECRET_ARCHIVE_ORG_PASSWORD }}
       run: |
         set -xe
 
