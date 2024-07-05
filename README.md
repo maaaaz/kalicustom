@@ -3,9 +3,9 @@ Kali custom - maaaaz edition
 
 Description
 -----------
-Some Kali builds, coming in different flavors:
-* In a VMDK format, based on the [official Kali VM builds](https://www.kali.org/get-kali/#kali-virtual-machines), with customizations
-* In an ISO format, based on the [official custom ISO method](https://www.kali.org/docs/development/live-build-a-custom-kali-iso/), with customizations
+Some customized Kali builds, coming in different flavors:
+* In a VMDK format, based on the [official Kali VM builds](https://www.kali.org/get-kali/#kali-virtual-machines)
+* In an ISO format, based on the [official custom ISO method](https://www.kali.org/docs/development/live-build-a-custom-kali-iso/)
 
 Customization & additions
 -------------------------
