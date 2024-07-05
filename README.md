@@ -3,11 +3,13 @@ Kali custom
 
 Description
 -----------
-Some Kali VM builds, based on the [official Kali VM builds](https://www.kali.org/get-kali/#kali-virtual-machines), but with customizations
+Some Kali builds, coming in different flavors:
+* In a VMDK format, based on the [official Kali VM builds](https://www.kali.org/get-kali/#kali-virtual-machines), with customizations
+* In an ISO format, based on the [official custom ISO method](https://www.kali.org/docs/development/live-build-a-custom-kali-iso/), with customizations
 
 Additions
 ---------
-Everything is documented in the [Github action build workflow](https://github.com/maaaaz/kalicustom/blob/main/.github/workflows/build_vmdk.yml) but here is a quick summary:
+Everything is documented in the [Github actions build workflows](https://github.com/maaaaz/kalicustom/tree/main/.github/workflows) but here is a quick summary:
 - These packages (utilities, infosec tools etc.):
   - https://github.com/maaaaz/dotfiles/blob/master/debian_ubuntu_packages.txt
   - https://github.com/maaaaz/dotfiles/blob/master/kali_missing_packages.txt
