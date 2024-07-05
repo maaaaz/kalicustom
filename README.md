@@ -7,8 +7,8 @@ Some Kali builds, coming in different flavors:
 * In a VMDK format, based on the [official Kali VM builds](https://www.kali.org/get-kali/#kali-virtual-machines), with customizations
 * In an ISO format, based on the [official custom ISO method](https://www.kali.org/docs/development/live-build-a-custom-kali-iso/), with customizations
 
-Additions
----------
+Customization & additions
+-------------------------
 Everything is documented in the [Github actions build workflows](https://github.com/maaaaz/kalicustom/tree/main/.github/workflows) but here is a quick summary:
 - These packages (utilities, infosec tools etc.):
   - https://github.com/maaaaz/dotfiles/blob/master/debian_ubuntu_packages.txt
