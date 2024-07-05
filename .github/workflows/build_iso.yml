@@ -97,6 +97,6 @@ jobs:
         cd /mnt/live-build-config/images/
         /tmp/ia configure --username=$SECRET_ARCHIVE_ORG_LOGIN --password=$SECRET_ARCHIVE_ORG_PASSWORD
 
-        KALI_RELEASE_NAME="kali-iso_maaaaz-edition-$(date '+%Y%m%d')"
+        KALI_RELEASE_NAME="kali-iso-maaaaz-edition-$(date '+%Y%m%d')"
         /tmp/ia upload -q $KALI_RELEASE_NAME *.iso --metadata="mediatype:software"
         /tmp/ia upload -q $KALI_RELEASE_NAME *.log --metadata="mediatype:software"
