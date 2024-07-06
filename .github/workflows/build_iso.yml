@@ -56,7 +56,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  build_iso:
     runs-on: ubuntu-latest
 
     steps:
