@@ -20,10 +20,6 @@ configure_bash() {
 }
 
 maaaaz_customization() {
-    venv_home="grep -i 'workon_home' /home/kali/.bashrc ||  echo 'export WORKON_HOME=~/.virtualenvs' >> /home/kali/.bashrc"
-    venv_python="grep -i 'virtualenvwrapper_python' /home/kali/.bashrc || echo 'export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3' >> /home/kali/.bashrc"
-    venv_wrapper="grep -i 'virtualenvwrapper.sh' /home/kali/.bashrc ||  echo 'source /usr/share/virtualenvwrapper/virtualenvwrapper.sh' >> /home/kali/.bashrc"
-    su kali -c "($venv_home) && ($venv_python) && ($venv_wrapper)"
     chown -R kali:kali /home/kali/
 }
 
