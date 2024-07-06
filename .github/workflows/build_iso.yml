@@ -177,7 +177,7 @@ jobs:
         time sha256sum --tag $KALI_RELEASE_ISO_FNAME | sudo tee $KALI_RELEASE_ISO_SHA256SUM_FILE
         sudo ls -alh $KALI_RELEASE_SHA256SUM_FILE
 
-    - name: Push to archive.org
+    - name: Push to archive.org and prepare the Github release
       env:   
         SECRET_ARCHIVE_ORG_LOGIN: ${{ secrets.SECRET_ARCHIVE_ORG_LOGIN }}
         SECRET_ARCHIVE_ORG_PASSWORD: ${{ secrets.SECRET_ARCHIVE_ORG_PASSWORD }}
