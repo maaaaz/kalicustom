@@ -63,14 +63,17 @@ jobs:
         echo "LIVE_BUILD_DIR=$LIVE_BUILD_DIR" >> $GITHUB_ENV
         echo "LIVE_BUILD_IMAGES_DIR=$LIVE_BUILD_IMAGES_DIR" >> $GITHUB_ENV
 
-        DEBOOTSTRAP_SCRIPTS_DIR="/usr/share/debootstrap/scripts/"
+        DEBOOTSTRAP_SCRIPTS_DIR="/usr/share/debootstrap/scripts"
         echo "DEBOOTSTRAP_SCRIPTS_DIR=$DEBOOTSTRAP_SCRIPTS_DIR" >> $GITHUB_ENV
 
         SPLASHSCREEN_DIR="$LIVE_BUILD_DIR/kali-config/common/bootloaders/grub-pc"
         echo "SPLASHSCREEN_DIR=$SPLASHSCREEN_DIR" >> $GITHUB_ENV
 
-        LIVE_HOOKS_DIR="$LIVE_BUILD_DIR/kali-config/common/hooks/live/"
+        LIVE_HOOKS_DIR="$LIVE_BUILD_DIR/kali-config/common/hooks/live"
         echo "LIVE_HOOKS_DIR=$LIVE_HOOKS_DIR" >> $GITHUB_ENV
+
+        ISO_ROOT="$LIVE_BUILD_DIR/kali-config/common/includes.chroot"
+        echo "ISO_ROOT=$ISO_ROOT" >> $GITHUB_ENV
         
         KALI_RELEASE_NAME="kali-iso-maaaaz-edition-$(date '+%Y%m%d')"
         echo "KALI_RELEASE_NAME=$KALI_RELEASE_NAME" >> $GITHUB_ENV
@@ -96,8 +99,8 @@ jobs:
         sudo cp -f $CUSTOM_RESOURCES_DIR/customization.chroot $LIVE_HOOKS_DIR/customization.chroot
        
         # placing files in the ISO
-        sudo cp -f $CUSTOM_RESOURCES_DIR/0031-kali-user-setup /mnt/live-build-config/kali-config/common/includes.chroot/usr/lib/live/config/0031-kali-user-setup
-        sudo cp -f $CUSTOM_RESOURCES_DIR/inputrc /mnt/live-build-config/kali-config/common/includes.chroot/etc/inputrc
+        sudo cp -f $CUSTOM_RESOURCES_DIR/0031-kali-user-setup $ISO_ROOT/usr/lib/live/config/0031-kali-user-setup
+        sudo cp -f $CUSTOM_RESOURCES_DIR/inputrc $ISO_ROOT/etc/inputrc
         
         sudo mkdir -p /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.config/qterminal.org/
         sudo cp -f $CUSTOM_RESOURCES_DIR/qterminal.ini /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.config/qterminal.org/qterminal.ini
