@@ -52,6 +52,9 @@ jobs:
     - name: Setup environment variables
       run: |
         set -xe
+
+        CUSTOM_RESOURCES_DIR="$GITHUB_WORKSPACE/_resources"
+        echo "CUSTOM_RESOURCES_DIR=$CUSTOM_RESOURCES_DIR" >> $GITHUB_ENV
         
         MNT_ROOT="/mnt"
         LIVE_BUILD_DIR="$MNT_ROOT/live-build-config"
@@ -63,7 +66,8 @@ jobs:
         DEBOOTSTRAP_SCRIPTS_DIR="/usr/share/debootstrap/scripts/"
         echo "DEBOOTSTRAP_SCRIPTS_DIR=$DEBOOTSTRAP_SCRIPTS_DIR" >> $GITHUB_ENV
 
-        SPLASHSCREEN_DIR="$LIVE_BUILD_DIR/kali-config/common/bootloaders/grub-pc/"
+
+        SPLASHSCREEN_DIR="$LIVE_BUILD_DIR/kali-config/common/bootloaders/grub-pc"
         echo "SPLASHSCREEN_DIR=$SPLASHSCREEN_DIR" >> $GITHUB_ENV
         
         KALI_RELEASE_NAME="kali-iso-maaaaz-edition-$(date '+%Y%m%d')"
@@ -84,24 +88,24 @@ jobs:
         sudo git clone "https://gitlab.com/kalilinux/build-scripts/live-build-config.git" $LIVE_BUILD_DIR
 
         # changing boot splashscreen
-        sudo cp -f $GITHUB_WORKSPACE/_resources/splash.png /mnt/live-build-config/kali-config/common/bootloaders/grub-pc/splash.png
+        sudo cp -f $CUSTOM_RESOURCES_DIR/splash.png $SPLASHSCREEN_DIR/splash.png
         
         # executing chrooted scripts
-        sudo cp -f $GITHUB_WORKSPACE/_resources/customization.chroot /mnt/live-build-config/kali-config/common/hooks/live/customization.chroot
+        sudo cp -f $CUSTOM_RESOURCES_DIR/customization.chroot /mnt/live-build-config/kali-config/common/hooks/live/customization.chroot
        
         # placing files in the ISO
-        sudo cp -f $GITHUB_WORKSPACE/_resources/0031-kali-user-setup /mnt/live-build-config/kali-config/common/includes.chroot/usr/lib/live/config/0031-kali-user-setup
-        sudo cp -f $GITHUB_WORKSPACE/_resources/inputrc /mnt/live-build-config/kali-config/common/includes.chroot/etc/inputrc
+        sudo cp -f $CUSTOM_RESOURCES_DIR/0031-kali-user-setup /mnt/live-build-config/kali-config/common/includes.chroot/usr/lib/live/config/0031-kali-user-setup
+        sudo cp -f $CUSTOM_RESOURCES_DIR/inputrc /mnt/live-build-config/kali-config/common/includes.chroot/etc/inputrc
         
         sudo mkdir -p /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.config/qterminal.org/
-        sudo cp -f $GITHUB_WORKSPACE/_resources/qterminal.ini /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.config/qterminal.org/qterminal.ini
+        sudo cp -f $CUSTOM_RESOURCES_DIR/qterminal.ini /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.config/qterminal.org/qterminal.ini
         
         sudo cp -f /tmp/.vimrc /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.vimrc
-        sudo cp -f $GITHUB_WORKSPACE/_resources/bashrc /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.bashrc
+        sudo cp -f $CUSTOM_RESOURCES_DIR/bashrc /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.bashrc
         
         sudo mkdir -p /mnt/live-build-config/kali-config/common/includes.chroot/root/
         sudo cp -f /tmp/.vimrc /mnt/live-build-config/kali-config/common/includes.chroot/root/.vimrc
-        sudo cp -f $GITHUB_WORKSPACE/_resources/bashrc /mnt/live-build-config/kali-config/common/includes.chroot/root/.bashrc
+        sudo cp -f CUSTOM_RESOURCES_DIR/bashrc /mnt/live-build-config/kali-config/common/includes.chroot/root/.bashrc
 
     - name: Build the image
       run: |
