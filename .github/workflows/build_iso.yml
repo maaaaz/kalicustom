@@ -41,19 +41,8 @@ on:
             - kali-tools-windows-resources
             - kali-tools-wireless
             
-      # inputs:
-      #   VM_URL:
-      #     description: URL of the .7z Kali VM
-      #     required: true
-      #     default: https://cdimage.kali.org/kali-2024.1/kali-linux-2024.1-virtualbox-amd64.7z
-        
-      #   VM_HASH:
-      #     description: Expected SHA256 hash 
-      #     required: true
-      #     default: 80ba5fdd6037f9261a5f49a7f18a0abb231551a1aec2d97da2344c2a0e72ced8
-
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build_iso:
