@@ -66,9 +66,11 @@ jobs:
         DEBOOTSTRAP_SCRIPTS_DIR="/usr/share/debootstrap/scripts/"
         echo "DEBOOTSTRAP_SCRIPTS_DIR=$DEBOOTSTRAP_SCRIPTS_DIR" >> $GITHUB_ENV
 
-
         SPLASHSCREEN_DIR="$LIVE_BUILD_DIR/kali-config/common/bootloaders/grub-pc"
         echo "SPLASHSCREEN_DIR=$SPLASHSCREEN_DIR" >> $GITHUB_ENV
+
+        LIVE_HOOKS_DIR="$LIVE_BUILD_DIR/kali-config/common/hooks/live/"
+        echo "LIVE_HOOKS_DIR=$LIVE_HOOKS_DIR" >> $GITHUB_ENV
         
         KALI_RELEASE_NAME="kali-iso-maaaaz-edition-$(date '+%Y%m%d')"
         echo "KALI_RELEASE_NAME=$KALI_RELEASE_NAME" >> $GITHUB_ENV
@@ -91,7 +93,7 @@ jobs:
         sudo cp -f $CUSTOM_RESOURCES_DIR/splash.png $SPLASHSCREEN_DIR/splash.png
         
         # executing chrooted scripts
-        sudo cp -f $CUSTOM_RESOURCES_DIR/customization.chroot /mnt/live-build-config/kali-config/common/hooks/live/customization.chroot
+        sudo cp -f $CUSTOM_RESOURCES_DIR/customization.chroot $LIVE_HOOKS_DIR/customization.chroot
        
         # placing files in the ISO
         sudo cp -f $CUSTOM_RESOURCES_DIR/0031-kali-user-setup /mnt/live-build-config/kali-config/common/includes.chroot/usr/lib/live/config/0031-kali-user-setup
