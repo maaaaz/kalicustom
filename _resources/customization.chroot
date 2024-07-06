@@ -41,6 +41,11 @@ su root -c /usr/bin/bash -c "WORKON_HOME=~/.virtualenvs VIRTUALENVWRAPPER_PYTHON
 # full-upgrade of packages
 $APT_PARAMS full-upgrade
 
+# list installed packages
+echo "[+] maaaaz: installed packages (Package Version Installed-Size)"
+dpkg-query -W -f='${Package} ${Version} ${Installed-Size;8}\n' | sort -n | column -t
+echo "------------------------------------------------------------------------------"
+
 # clean apt
 $APT_PARAMS autoremove --purge
 $APT_PARAMS autoclean
