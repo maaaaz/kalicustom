@@ -72,8 +72,8 @@ jobs:
         LIVE_HOOKS_DIR="$LIVE_BUILD_DIR/kali-config/common/hooks/live"
         echo "LIVE_HOOKS_DIR=$LIVE_HOOKS_DIR" >> $GITHUB_ENV
 
-        ISO_ROOT="$LIVE_BUILD_DIR/kali-config/common/includes.chroot"
-        echo "ISO_ROOT=$ISO_ROOT" >> $GITHUB_ENV
+        ISO_SQUASHFS_ROOT="$LIVE_BUILD_DIR/kali-config/common/includes.chroot"
+        echo "ISO_SQUASHFS_ROOT=$ISO_SQUASHFS_ROOT" >> $GITHUB_ENV
         
         KALI_RELEASE_NAME="kali-iso-maaaaz-edition-$(date '+%Y%m%d')"
         echo "KALI_RELEASE_NAME=$KALI_RELEASE_NAME" >> $GITHUB_ENV
@@ -99,24 +99,26 @@ jobs:
         sudo cp -f $CUSTOM_RESOURCES_DIR/customization.chroot $LIVE_HOOKS_DIR/customization.chroot
        
         # placing files in the ISO
-        sudo cp -f $CUSTOM_RESOURCES_DIR/0031-kali-user-setup $ISO_ROOT/usr/lib/live/config/0031-kali-user-setup
+        sudo cp -f $CUSTOM_RESOURCES_DIR/0031-kali-user-setup $ISO_SQUASHFS_ROOT/usr/lib/live/config/0031-kali-user-setup
         sudo cp -f $CUSTOM_RESOURCES_DIR/inputrc $ISO_ROOT/etc/inputrc
+
+        ## qterminal
+        sudo mkdir -p $ISO_SQUASHFS_ROOT/home/kali/.config/qterminal.org/
+        sudo cp -f $CUSTOM_RESOURCES_DIR/qterminal.ini $ISO_SQUASHFS_ROOT/home/kali/.config/qterminal.org/qterminal.ini
+
+        ## vimrc + bashrc in kali and root user homes
+        sudo cp -f /tmp/.vimrc $ISO_SQUASHFS_ROOT/home/kali/.vimrc
+        sudo cp -f $CUSTOM_RESOURCES_DIR/bashrc $ISO_SQUASHFS_ROOT/home/kali/.bashrc
         
-        sudo mkdir -p /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.config/qterminal.org/
-        sudo cp -f $CUSTOM_RESOURCES_DIR/qterminal.ini /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.config/qterminal.org/qterminal.ini
-        
-        sudo cp -f /tmp/.vimrc /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.vimrc
-        sudo cp -f $CUSTOM_RESOURCES_DIR/bashrc /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.bashrc
-        
-        sudo mkdir -p /mnt/live-build-config/kali-config/common/includes.chroot/root/
-        sudo cp -f /tmp/.vimrc /mnt/live-build-config/kali-config/common/includes.chroot/root/.vimrc
-        sudo cp -f CUSTOM_RESOURCES_DIR/bashrc /mnt/live-build-config/kali-config/common/includes.chroot/root/.bashrc
+        sudo mkdir -p $ISO_SQUASHFS_ROOT/root/
+        sudo cp -f /tmp/.vimrc $ISO_SQUASHFS_ROOT/root/.vimrc
+        sudo cp -f CUSTOM_RESOURCES_DIR/bashrc $ISO_SQUASHFS_ROOT/root/.bashrc
 
     - name: Build the image
       run: |
         set -xe
         
-        cd /mnt/live-build-config/
+        cd $LIVE_BUILD_DIR
         sudo ./build.sh --verbose --variant xfce
 
     - name: Push to archive.org
