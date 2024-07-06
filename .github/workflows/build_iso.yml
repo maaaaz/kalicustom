@@ -82,9 +82,10 @@ jobs:
         echo "CUSTOM_RESOURCES_DIR=$CUSTOM_RESOURCES_DIR" >> $GITHUB_ENV
         
         MNT_ROOT="/mnt"
+        echo "MNT_ROOT=$MNT_ROOT" >> $GITHUB_ENV
+        
         LIVE_BUILD_DIR="$MNT_ROOT/live-build-config"
         LIVE_BUILD_IMAGES_DIR="$LIVE_BUILD_DIR/images"
-        echo "MNT_ROOT=$MNT_ROOT" >> $GITHUB_ENV
         echo "LIVE_BUILD_DIR=$LIVE_BUILD_DIR" >> $GITHUB_ENV
         echo "LIVE_BUILD_IMAGES_DIR=$LIVE_BUILD_IMAGES_DIR" >> $GITHUB_ENV
 
@@ -100,10 +101,13 @@ jobs:
         ISO_SQUASHFS_ROOT="$LIVE_BUILD_DIR/kali-config/common/includes.chroot"
         echo "ISO_SQUASHFS_ROOT=$ISO_SQUASHFS_ROOT" >> $GITHUB_ENV
 
-
         FLAVOR=$(echo "${{ github.event.inputs.flavor }}" | sed -r "s/^kali-(linux|tools)-//g")
         KALI_RELEASE_NAME="kali-iso-maaaaz-edition-$FLAVOR-$(date '+%Y%m%d')"
+        KALI_RELEASE_ISO_FNAME="$KALI_RELEASE_NAME.iso"
+        KALI_RELEASE_LOG_FNAME=="$KALI_RELEASE_NAME.log"
         echo "KALI_RELEASE_NAME=$KALI_RELEASE_NAME" >> $GITHUB_ENV
+        echo "KALI_RELEASE_ISO_FNAME=$KALI_RELEASE_ISO_FNAME" >> $GITHUB_ENV
+        echo "KALI_RELEASE_LOG_FNAME=$KALI_RELEASE_LOG_FNAME" >> $GITHUB_ENV
         
 
     - name: Prepare environment
@@ -121,6 +125,7 @@ jobs:
         echo "${{ github.event.inputs.flavor }}" >> "$LIVE_BUILD_DIR/kali-config/variant-default/package-lists/kali.list.chroot"
         echo "[+] cat "$LIVE_BUILD_DIR/kali-config/variant-default/package-lists/kali.list.chroot"
         cat "$LIVE_BUILD_DIR/kali-config/variant-default/package-lists/kali.list.chroot"
+        echo "------------"
         
         # changing boot splashscreen
         sudo cp -f $CUSTOM_RESOURCES_DIR/splash.png $SPLASHSCREEN_DIR/splash.png
@@ -149,7 +154,13 @@ jobs:
         set -xe
         
         cd $LIVE_BUILD_DIR
-        sudo ./build.sh --verbose --variant xfce
+        sudo ./build.sh --verbose --live --variant xfce
+        
+        OLD_ISO_FNAME=$(./build.sh --get-image-path)
+        
+        cd $LIVE_BUILD_IMAGES_DIR
+        mv $OLD_ISO_FNAME $KALI_RELEASE_ISO_FNAME
+        mv $OLD_ISO_FNAME.log KALI_RELEASE_LOG_FNAME
 
     - name: Push to archive.org
       env:   
