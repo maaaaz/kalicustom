@@ -158,7 +158,12 @@ jobs:
         
         cd $LIVE_BUILD_DIR
         sudo ./build.sh --verbose --live --variant xfce
-        
+
+    - name: Compute hash
+      run: |
+        set -xe
+
+        cd $LIVE_BUILD_DIR
         OLD_ISO_FNAME=$(./build.sh --get-image-path --live --variant xfce)
         OLD_LOG_FNAME=$(basename $OLD_ISO_FNAME .iso).log
         
@@ -183,4 +188,20 @@ jobs:
         /tmp/ia configure --username=$SECRET_ARCHIVE_ORG_LOGIN --password=$SECRET_ARCHIVE_ORG_PASSWORD
 
         /tmp/ia upload -q $KALI_RELEASE_NAME $KALI_RELEASE_ISO_FNAME --metadata="mediatype:software"
-        /tmp/ia upload -q $KALI_RELEASE_NAME $KALI_RELEASE_LOG_FNAME --metadata="mediatype:software"
+        /tmp/ia upload -q $KALI_RELEASE_NAME $KALI_RELEASE_LOG_FNAME --metadata="mediatype:texts"
+        /tmp/ia upload -q $KALI_RELEASE_NAME $KALI_RELEASE_ISO_SHA256SUM_FILE --metadata="mediatype:texts"
+
+        KALI_RELEASE_NOTES="/tmp/$KALI_RELEASE_NAME-notes.txt"
+        echo "KALI_RELEASE_NOTES=$KALI_RELEASE_NOTES" >> $GITHUB_ENV
+        echo -e "Download the VM VMDK file at https://archive.org/details/$KALI_RELEASE_NAME\n" > $KALI_RELEASE_NOTES
+        cat $KALI_RELEASE_ISO_SHA256SUM_FILE >> $KALI_RELEASE_NOTES
+
+    - name: Create a new Github release
+      uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564 #v2.0.4
+      with:
+        body_path: ${{ env.KALI_RELEASE_NOTES }}
+        name: ${{ env.KALI_RELEASE_NAME }}
+        tag_name: ${{ env.KALI_RELEASE_NAME }}
+        files: |
+          ${{ env.KALI_RELEASE_ISO_SHA256SUM_FILE }}
+          ${{ env.KALI_RELEASE_LOG_FNAME }}
