@@ -24,7 +24,7 @@ Everything is documented in the [Github actions build workflows](https://github.
 
 Releases
 ---------
-- See https://github.com/maaaaz/Kalicustom/releases
+- See https://github.com/maaaaz/kalicustom/releases
 - Releases are hosted on `archive.org` (https://archive.org/details/@maaaaz/) because:
   - `archive.org` accepts larger files than the Github release feature one (2 GB, which is not enough)
   - `archive.org` provides multiple useful downloading capabilities: direct download, torrent etc.
