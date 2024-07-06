@@ -2,6 +2,31 @@ name: Kali VM customization build script (ISO)
 
 on: 
   workflow_dispatch:
+    inputs:
+        flavor:
+          description: 'Choice of kali metapackage edition according to https://www.kali.org/tools/kali-meta/'
+          required: true
+          default: 'kali-tools-forensics'
+          type: choice
+          options:
+            - kali-linux-large
+            - kali-linux-everything
+            - kali-tools-forensics
+            - kali-tools-vulnerability
+            - kali-tools-information-gathering
+            - kali-tools-vulnerability
+            - kali-tools-web
+            - kali-tools-database
+            - kali-tools-passwords
+            - kali-tools-wireless
+            - kali-tools-reverse-engineering
+            - kali-tools-exploitation
+            - kali-tools-social-engineering
+            - kali-tools-sniffing-spoofing
+            - kali-tools-post-exploitation
+            - kali-tools-forensics
+            - kali-tools-reporting
+            
       # inputs:
       #   VM_URL:
       #     description: URL of the .7z Kali VM
