@@ -23,7 +23,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Install prerequisites
+    - name: Collect and install prerequisites
       run: |
         set -xe
         
@@ -52,7 +52,11 @@ jobs:
     - name: Setup environment variables
       run: |
         set -xe
-        echo "KALI_BASE_NAME=$KALI_BASE_NAME" >> $GITHUB_ENV
+        echo "$LIVE_BUILD_DIR=/mnt/live-build-config" >> $GITHUB_ENV
+        echo "$LIVE_BUILD_IMAGES_DIR=$LIVE_BUILD_DIR/images" >> $GITHUB_ENV
+
+        echo $LIVE_BUILD_DIR
+        echo $LIVE_BUILD_IMAGES_DIR
 
     - name: Prepare environment
       run: |
