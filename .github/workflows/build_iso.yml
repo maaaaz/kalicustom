@@ -140,7 +140,7 @@ jobs:
 
         # setup flavor packages
         echo "${{ github.event.inputs.flavor }}" | sudo tee -a "$LIVE_BUILD_DIR/kali-config/variant-default/package-lists/kali.list.chroot"
-        echo "[+] cat "$LIVE_BUILD_DIR/kali-config/variant-default/package-lists/kali.list.chroot"
+        echo "[+] cat '$LIVE_BUILD_DIR/kali-config/variant-default/package-lists/kali.list.chroot'"
         cat "$LIVE_BUILD_DIR/kali-config/variant-default/package-lists/kali.list.chroot"
         echo "------------"
         
