@@ -104,10 +104,13 @@ jobs:
         FLAVOR=$(echo "${{ github.event.inputs.flavor }}" | sed -r "s/^kali-(linux|tools)-//g")
         KALI_RELEASE_NAME="kali-iso-maaaaz-edition-$FLAVOR-$(date '+%Y%m%d')"
         KALI_RELEASE_ISO_FNAME="$KALI_RELEASE_NAME.iso"
-        KALI_RELEASE_LOG_FNAME=="$KALI_RELEASE_NAME.log"
+        KALI_RELEASE_LOG_FNAME="$KALI_RELEASE_NAME.log"
+        KALI_RELEASE_ISO_SHA256SUM_FILE="$KALI_RELEASE_ISO_FNAME-sha256sum.txt"
+        
         echo "KALI_RELEASE_NAME=$KALI_RELEASE_NAME" >> $GITHUB_ENV
         echo "KALI_RELEASE_ISO_FNAME=$KALI_RELEASE_ISO_FNAME" >> $GITHUB_ENV
         echo "KALI_RELEASE_LOG_FNAME=$KALI_RELEASE_LOG_FNAME" >> $GITHUB_ENV
+        echo "KALI_RELEASE_ISO_SHA256SUM_FILE=$KALI_RELEASE_ISO_SHA256SUM_FILE" >> $GITHUB_ENV
         
 
     - name: Prepare environment
@@ -160,8 +163,14 @@ jobs:
         OLD_LOG_FNAME=$(basename $OLD_ISO_FNAME .iso).log
         
         cd $LIVE_BUILD_IMAGES_DIR
-        mv $OLD_ISO_FNAME $KALI_RELEASE_ISO_FNAME
-        mv $OLD_LOG_FNAME KALI_RELEASE_LOG_FNAME
+        mv -f $OLD_ISO_FNAME $KALI_RELEASE_ISO_FNAME
+        sudo ls -alh $KALI_RELEASE_ISO_FNAME
+        
+        mv -f $OLD_LOG_FNAME $KALI_RELEASE_LOG_FNAME
+        sudo ls -alh $KALI_RELEASE_LOG_FNAME
+
+        time sha256sum --tag $KALI_RELEASE_ISO_FNAME | sudo tee $KALI_RELEASE_ISO_SHA256SUM_FILE
+        sudo ls -alh $KALI_RELEASE_SHA256SUM_FILE
 
     - name: Push to archive.org
       env:   
@@ -170,9 +179,8 @@ jobs:
       run: |
         set -xe
 
-        cd /mnt/live-build-config/images/
+        cd $LIVE_BUILD_IMAGES_DIR
         /tmp/ia configure --username=$SECRET_ARCHIVE_ORG_LOGIN --password=$SECRET_ARCHIVE_ORG_PASSWORD
 
-        KALI_RELEASE_NAME="kali-iso-maaaaz-edition-$(date '+%Y%m%d')"
-        /tmp/ia upload -q $KALI_RELEASE_NAME *.iso --metadata="mediatype:software"
-        /tmp/ia upload -q $KALI_RELEASE_NAME *.log --metadata="mediatype:software"
+        /tmp/ia upload -q $KALI_RELEASE_NAME $KALI_RELEASE_ISO_FNAME --metadata="mediatype:software"
+        /tmp/ia upload -q $KALI_RELEASE_NAME $KALI_RELEASE_LOG_FNAME --metadata="mediatype:software"
