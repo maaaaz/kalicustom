@@ -112,7 +112,7 @@ jobs:
         
         sudo mkdir -p $ISO_SQUASHFS_ROOT/root/
         sudo cp -f /tmp/.vimrc $ISO_SQUASHFS_ROOT/root/.vimrc
-        sudo cp -f CUSTOM_RESOURCES_DIR/bashrc $ISO_SQUASHFS_ROOT/root/.bashrc
+        sudo cp -f $CUSTOM_RESOURCES_DIR/bashrc $ISO_SQUASHFS_ROOT/root/.bashrc
 
     - name: Build the image
       run: |
