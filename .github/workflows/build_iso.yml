@@ -99,10 +99,12 @@ jobs:
 
         ISO_SQUASHFS_ROOT="$LIVE_BUILD_DIR/kali-config/common/includes.chroot"
         echo "ISO_SQUASHFS_ROOT=$ISO_SQUASHFS_ROOT" >> $GITHUB_ENV
-        
-        KALI_RELEASE_NAME="kali-iso-maaaaz-edition-$(date '+%Y%m%d')"
+
+
+        FLAVOR=$(echo "${{ github.event.inputs.flavor }}" | sed -r "s/^kali-(linux|tools)-//g")
+        KALI_RELEASE_NAME="kali-iso-maaaaz-edition-$FLAVOR-$(date '+%Y%m%d')"
         echo "KALI_RELEASE_NAME=$KALI_RELEASE_NAME" >> $GITHUB_ENV
-        
+        exit 1
         
         
 
