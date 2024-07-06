@@ -52,8 +52,11 @@ jobs:
     - name: Setup environment variables
       run: |
         set -xe
-        echo "$LIVE_BUILD_DIR=/mnt/live-build-config" >> $GITHUB_ENV
-        echo "$LIVE_BUILD_IMAGES_DIR=$LIVE_BUILD_DIR/images" >> $GITHUB_ENV
+        LIVE_BUILD_DIR="/mnt/live-build-config"
+        LIVE_BUILD_IMAGES_DIR="$LIVE_BUILD_DIR/images"
+        
+        echo "LIVE_BUILD_DIR=$LIVE_BUILD_DIR" >> $GITHUB_ENV
+        echo "LIVE_BUILD_IMAGES_DIR=$LIVE_BUILD_IMAGES_DIR" >> $GITHUB_ENV
 
         echo $LIVE_BUILD_DIR
         echo $LIVE_BUILD_IMAGES_DIR
