@@ -29,7 +29,6 @@ jobs:
         
         # silence APT
         APT_PARAMS='sudo apt -y -qq -o=Dpkg::Use-Pty=0'
-        #$APT_PARAMS update && $APT_PARAMS install p7zip-full kpartx unzip zip qemu-utils axel virtualbox
         $APT_PARAMS update && $APT_PARAMS install git live-build simple-cdd cdebootstrap curl
 
         cd /tmp/
@@ -50,6 +49,11 @@ jobs:
 
         wget -nv "https://github.com/maaaaz/dotfiles/raw/master/.vimrc" -O ".vimrc"
 
+    - name: Setup environment variables
+      run: |
+        set -xe
+        echo "KALI_BASE_NAME=$KALI_BASE_NAME" >> $GITHUB_ENV
+
     - name: Prepare environment
       run: |
         set -xe
@@ -57,7 +61,6 @@ jobs:
         cd /usr/share/debootstrap/scripts/
         (echo "default_mirror http://http.kali.org/kali"; sed -e "s/debian-archive-keyring.gpg/kali-archive-keyring.gpg/g" sid) > /tmp/kali
         sudo mv /tmp/kali .
-        #sudo ln -s kali kali-rolling
 
         cd /mnt/
         sudo git clone https://gitlab.com/kalilinux/build-scripts/live-build-config.git live-build-config
@@ -76,9 +79,11 @@ jobs:
         sudo cp -f $GITHUB_WORKSPACE/_resources/qterminal.ini /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.config/qterminal.org/qterminal.ini
         
         sudo cp -f /tmp/.vimrc /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.vimrc
+        sudo cp -f $GITHUB_WORKSPACE/_resources/bashrc /mnt/live-build-config/kali-config/common/includes.chroot/home/kali/.bashrc
         
         sudo mkdir -p /mnt/live-build-config/kali-config/common/includes.chroot/root/
         sudo cp -f /tmp/.vimrc /mnt/live-build-config/kali-config/common/includes.chroot/root/.vimrc
+        sudo cp -f $GITHUB_WORKSPACE/_resources/bashrc /mnt/live-build-config/kali-config/common/includes.chroot/root/.bashrc
 
     - name: Build the image
       run: |
