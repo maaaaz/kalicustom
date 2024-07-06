@@ -139,7 +139,7 @@ jobs:
         sudo git clone "https://gitlab.com/kalilinux/build-scripts/live-build-config.git" $LIVE_BUILD_DIR
 
         # setup flavor packages
-        echo "${{ github.event.inputs.flavor }}" >> "$LIVE_BUILD_DIR/kali-config/variant-default/package-lists/kali.list.chroot"
+        sudo echo "${{ github.event.inputs.flavor }}" >> "$LIVE_BUILD_DIR/kali-config/variant-default/package-lists/kali.list.chroot"
         echo "[+] cat "$LIVE_BUILD_DIR/kali-config/variant-default/package-lists/kali.list.chroot"
         cat "$LIVE_BUILD_DIR/kali-config/variant-default/package-lists/kali.list.chroot"
         echo "------------"
@@ -182,10 +182,10 @@ jobs:
         OLD_LOG_FNAME=$(basename $OLD_ISO_FNAME .iso).log
         
         cd $LIVE_BUILD_IMAGES_DIR
-        mv -f $OLD_ISO_FNAME $KALI_RELEASE_ISO_FNAME
+        sudo mv -f $OLD_ISO_FNAME $KALI_RELEASE_ISO_FNAME
         sudo ls -alh $KALI_RELEASE_ISO_FNAME
         
-        mv -f $OLD_LOG_FNAME $KALI_RELEASE_LOG_FNAME
+        sudo mv -f $OLD_LOG_FNAME $KALI_RELEASE_LOG_FNAME
         sudo ls -alh $KALI_RELEASE_LOG_FNAME
 
         time sha256sum --tag $KALI_RELEASE_ISO_FNAME | sudo tee $KALI_RELEASE_ISO_SHA256SUM_FILE
