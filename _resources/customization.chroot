@@ -17,8 +17,6 @@ $APT_PARAMS install $(cat '/tmp/kali_missing_packages.txt')
 wget -nv 'https://raw.githubusercontent.com/maaaaz/dotfiles/master/debian_ubuntu_packages.txt' -O '/tmp/debian_ubuntu_packages.txt'
 $APT_PARAMS install $(cat '/tmp/debian_ubuntu_packages.txt')
 
-$APT_PARAMS install kali-tools-forensics
-
 wget -nv 'https://packages.microsoft.com/debian/12/prod/pool/main/s/sysinternalsebpf/sysinternalsebpf_1.3.0_amd64.deb' -O '/tmp/sysinternalsebpf_1.3.0_amd64.deb'
 dpkg -i '/tmp/sysinternalsebpf_1.3.0_amd64.deb'
 
