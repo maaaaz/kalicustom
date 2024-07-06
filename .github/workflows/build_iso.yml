@@ -178,8 +178,8 @@ jobs:
         set -xe
 
         cd $LIVE_BUILD_DIR
-        OLD_ISO_FNAME=$(./build.sh --get-image-path --live --variant xfce)
-        OLD_LOG_FNAME=$(basename $OLD_ISO_FNAME .iso).log
+        OLD_ISO_FNAME=$(sudo ./build.sh --get-image-path --live --variant xfce)
+        OLD_LOG_FNAME=$(sudo basename $OLD_ISO_FNAME .iso).log
         
         cd $LIVE_BUILD_IMAGES_DIR
         sudo mv -f $OLD_ISO_FNAME $KALI_RELEASE_ISO_FNAME
@@ -188,7 +188,7 @@ jobs:
         sudo mv -f $OLD_LOG_FNAME $KALI_RELEASE_LOG_FNAME
         sudo ls -alh $KALI_RELEASE_LOG_FNAME
 
-        time sha256sum --tag $KALI_RELEASE_ISO_FNAME | sudo tee $KALI_RELEASE_ISO_SHA256SUM_FILE
+        time sudo sha256sum --tag $KALI_RELEASE_ISO_FNAME | sudo tee $KALI_RELEASE_ISO_SHA256SUM_FILE
         sudo ls -alh $KALI_RELEASE_SHA256SUM_FILE
 
     - name: Push to archive.org and prepare the Github release
