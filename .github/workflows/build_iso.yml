@@ -11,21 +11,35 @@ on:
           options:
             - kali-linux-large
             - kali-linux-everything
+            - kali-tools-802-11
+            - kali-tools-bluetooth
+            - kali-tools-crypto-stego
+            - kali-tools-database
+            - kali-tools-detect
+            - kali-tools-exploitation
             - kali-tools-forensics
-            - kali-tools-vulnerability
+            - kali-tools-fuzzing
+            - kali-tools-gpu
+            - kali-tools-hardware
+            - kali-tools-identify
             - kali-tools-information-gathering
+            - kali-tools-passwords
+            - kali-tools-post-exploitation
+            - kali-tools-protect
+            - kali-tools-recover
+            - kali-tools-reporting
+            - kali-tools-respond
+            - kali-tools-reverse-engineering
+            - kali-tools-rfid
+            - kali-tools-sdr
+            - kali-tools-sniffing-spoofing
+            - kali-tools-social-engineering
+            - kali-tools-top10
+            - kali-tools-voip
             - kali-tools-vulnerability
             - kali-tools-web
-            - kali-tools-database
-            - kali-tools-passwords
+            - kali-tools-windows-resources
             - kali-tools-wireless
-            - kali-tools-reverse-engineering
-            - kali-tools-exploitation
-            - kali-tools-social-engineering
-            - kali-tools-sniffing-spoofing
-            - kali-tools-post-exploitation
-            - kali-tools-forensics
-            - kali-tools-reporting
             
       # inputs:
       #   VM_URL:
