@@ -156,11 +156,12 @@ jobs:
         cd $LIVE_BUILD_DIR
         sudo ./build.sh --verbose --live --variant xfce
         
-        OLD_ISO_FNAME=$(./build.sh --get-image-path)
+        OLD_ISO_FNAME=$(./build.sh --get-image-path --live --variant xfce)
+        OLD_LOG_FNAME=$(basename $OLD_ISO_FNAME .iso).log
         
         cd $LIVE_BUILD_IMAGES_DIR
         mv $OLD_ISO_FNAME $KALI_RELEASE_ISO_FNAME
-        mv $OLD_ISO_FNAME.log KALI_RELEASE_LOG_FNAME
+        mv $OLD_LOG_FNAME KALI_RELEASE_LOG_FNAME
 
     - name: Push to archive.org
       env:   
