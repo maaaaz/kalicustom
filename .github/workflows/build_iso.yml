@@ -108,12 +108,12 @@ jobs:
         KALI_RELEASE_NAME="kali-iso-maaaaz-edition-$FLAVOR-$(date '+%Y%m%d')"
         KALI_RELEASE_ISO_FNAME="$KALI_RELEASE_NAME.iso"
         KALI_RELEASE_LOG_FNAME="$KALI_RELEASE_NAME.log"
-        KALI_RELEASE_ISO_SHA256SUM_FILE=$(readlink -f "$KALI_RELEASE_ISO_FNAME-sha256sum.txt")
+        KALI_RELEASE_ISO_SHA256SUM_FNAME="$KALI_RELEASE_ISO_FNAME-sha256sum.txt"
         
         echo "KALI_RELEASE_NAME=$KALI_RELEASE_NAME" >> $GITHUB_ENV
         echo "KALI_RELEASE_ISO_FNAME=$KALI_RELEASE_ISO_FNAME" >> $GITHUB_ENV
         echo "KALI_RELEASE_LOG_FNAME=$KALI_RELEASE_LOG_FNAME" >> $GITHUB_ENV
-        echo "KALI_RELEASE_ISO_SHA256SUM_FILE=$KALI_RELEASE_ISO_SHA256SUM_FILE" >> $GITHUB_ENV
+        echo "KALI_RELEASE_ISO_SHA256SUM_FNAME=$KALI_RELEASE_ISO_SHA256SUM_FNAME" >> $GITHUB_ENV
         
 
     - name: Prepare environment
@@ -182,6 +182,9 @@ jobs:
 
         time sudo sha256sum --tag $KALI_RELEASE_ISO_FNAME | sudo tee $KALI_RELEASE_ISO_SHA256SUM_FILE
         sudo ls -alh $KALI_RELEASE_SHA256SUM_FILE
+        
+        KALI_RELEASE_ISO_SHA256SUM_FNAME_PATH=$(readlink -f $KALI_RELEASE_ISO_SHA256SUM_FILE)
+        echo "KALI_RELEASE_ISO_SHA256SUM_FNAME_PATH=$KALI_RELEASE_ISO_SHA256SUM_FNAME_PATH" >> $GITHUB_ENV
 
     - name: Push to archive.org and prepare the Github release
       env:   
@@ -209,5 +212,5 @@ jobs:
         name: ${{ env.KALI_RELEASE_NAME }}
         tag_name: ${{ env.KALI_RELEASE_NAME }}
         files: |
-          ${{ env.KALI_RELEASE_ISO_SHA256SUM_FILE }}
+          ${{ env.KALI_RELEASE_ISO_SHA256SUM_FNAME_PATH }}
           ${{ env.KALI_RELEASE_LOG_FNAME_PATH }}
