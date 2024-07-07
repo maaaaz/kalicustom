@@ -184,7 +184,7 @@ jobs:
         sudo ls -alh $KALI_RELEASE_SHA256SUM_FILE
         
         KALI_RELEASE_ISO_SHA256SUM_FNAME_PATH=$(readlink -f $KALI_RELEASE_ISO_SHA256SUM_FNAME)
-        echo "KALI_RELEASE_ISO_SHA256SUM_FNAME_PATH=$KALI_RELEASE_ISO_SHA256SUM_FNAME" >> $GITHUB_ENV
+        echo "KALI_RELEASE_ISO_SHA256SUM_FNAME_PATH=$KALI_RELEASE_ISO_SHA256SUM_FNAME_PATH" >> $GITHUB_ENV
 
     - name: Push to archive.org and prepare the Github release
       env:   
