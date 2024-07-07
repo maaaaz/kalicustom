@@ -5,9 +5,6 @@ APT_PARAMS="apt -y -qq -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--f
 $APT_PARAMS update
 
 # set localization
-rm -rf /etc/localtime
-ln -s /usr/share/zoneinfo/Europe/Paris /etc/localtime
-timedatectl set-timezone Europe/Paris
 sh -c "sed -i 's/XKBLAYOUT=\"\w*\"/XKBLAYOUT=\"'fr'\"/g' /etc/default/keyboard"
 
 # install packages
