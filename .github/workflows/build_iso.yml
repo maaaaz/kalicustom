@@ -141,7 +141,7 @@ jobs:
        
         # placing files in the ISO
         sudo cp -f $CUSTOM_RESOURCES_DIR/0031-kali-user-setup $ISO_SQUASHFS_ROOT/usr/lib/live/config/0031-kali-user-setup
-        sudo cp -f $CUSTOM_RESOURCES_DIR/inputrc $ISO_ROOT/etc/inputrc
+        sudo cp -f $CUSTOM_RESOURCES_DIR/inputrc $ISO_SQUASHFS_ROOT/etc/inputrc
 
         ## qterminal
         sudo mkdir -p $ISO_SQUASHFS_ROOT/home/kali/.config/qterminal.org/
