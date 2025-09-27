@@ -46,8 +46,8 @@ $APT_PARAMS clean
 # disable services
 echo "[+] services before bulk disable+mask"
 systemctl list-unit-files --no-pager
-systemctl list-units --type=service --state=active
-systemctl list-units --type=service --state=running
+systemctl list-units --type=service --state=active --no-pager
+systemctl list-units --type=service --state=running --no-pager
 
 SERVICES_TO_DISABLE="rpcbind.socket rpcbind rpcbind.service rpc-statd-notify.service xrdp systemd-resolved.service lvm2-monitor.service mdadm-shutdown.service tor.service lvm2-lvmpolld.socket nfs-client.target remote-fs.target exim4.service exim4-base.timer fstrim.timer lm-sensors.service tftpd-hpa.service"
 systemctl stop $SERVICES_TO_DISABLE
@@ -55,7 +55,7 @@ systemctl mask $SERVICES_TO_DISABLE
 
 echo "[+] services after bulk disable+mask"
 systemctl list-unit-files --no-pager
-systemctl list-units --type=service --state=active
-systemctl list-units --type=service --state=running
+systemctl list-units --type=service --state=active --no-pager
+systemctl list-units --type=service --state=running --no-pager
 
 echo "[+] maaaaz: customization finished"
