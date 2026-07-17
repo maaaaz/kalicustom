@@ -147,11 +147,7 @@ jobs:
         wget -nv 'https://raw.githubusercontent.com/maaaaz/dotfiles/master/kali_missing_packages.txt' -O '/tmp/kali_missing_packages.txt'
         $CHROOT_PARAMS $APT_PARAMS_VDI install $(cat '/tmp/kali_missing_packages.txt') 
         
-        wget -nv 'https://raw.githubusercontent.com/maaaaz/dotfiles/master/debian_ubuntu_packages.txt' -O '/tmp/debian_ubuntu_packages.txt'
-        $CHROOT_PARAMS $APT_PARAMS_VDI install $(cat '/tmp/debian_ubuntu_packages.txt')
-
-        wget -nv 'https://github.com/maaaaz/GPartedPlusPlus/blob/main/_resources/packages_to_add.txt' -O '/tmp/gparted_packages.txt'
-        $CHROOT_PARAMS $APT_PARAMS_VDI install $(cat '/tmp/gparted_packages.txt')
+        $CHROOT_PARAMS $APT_PARAMS_VDI install $(cat "$GITHUB_WORKSPACE/_resources/packages_to_add.txt")
 
         # hypervisors (cf. https://gitlab.com/kalilinux/build-scripts/live-build-config/-/blob/master/kali-config/common/package-lists/virtualization.list.chroot)
         $CHROOT_PARAMS $APT_PARAMS_VDI install qemu-guest-agent spice-vdagent
