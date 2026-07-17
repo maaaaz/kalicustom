@@ -6,12 +6,12 @@ on:
         VM_URL:
           description: URL of the .7z Kali VM
           required: true
-          default: https://cdimage.kali.org/kali-2024.1/kali-linux-2024.1-virtualbox-amd64.7z
+          default: https://cdimage.kali.org/kali-2026.2/kali-linux-2026.2-virtualbox-amd64.7z
         
         VM_HASH:
           description: Expected SHA256 hash 
           required: true
-          default: 80ba5fdd6037f9261a5f49a7f18a0abb231551a1aec2d97da2344c2a0e72ced8
+          default: 41ed7ec51cdd3a5ca663ec09492261ba81acb26625fdda85ce7acb16909f3cee
 
 permissions:
   contents: write
@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     
     - name: Install prerequisites
       run: |
@@ -142,11 +142,16 @@ jobs:
         $CHROOT_PARAMS apt-mark hold grub-pc
         $CHROOT_PARAMS $APT_PARAMS_VDI update
 
+        $CHROOT_PARAMS $APT_PARAMS_VDI install kali-tools-forensics
+        
         wget -nv 'https://raw.githubusercontent.com/maaaaz/dotfiles/master/kali_missing_packages.txt' -O '/tmp/kali_missing_packages.txt'
         $CHROOT_PARAMS $APT_PARAMS_VDI install $(cat '/tmp/kali_missing_packages.txt') 
         
         wget -nv 'https://raw.githubusercontent.com/maaaaz/dotfiles/master/debian_ubuntu_packages.txt' -O '/tmp/debian_ubuntu_packages.txt'
         $CHROOT_PARAMS $APT_PARAMS_VDI install $(cat '/tmp/debian_ubuntu_packages.txt')
+
+        wget -nv 'https://github.com/maaaaz/GPartedPlusPlus/blob/main/_resources/packages_to_add.txt' -O '/tmp/gparted_packages.txt'
+        $CHROOT_PARAMS $APT_PARAMS_VDI install $(cat '/tmp/gparted_packages.txt')
 
         # hypervisors (cf. https://gitlab.com/kalilinux/build-scripts/live-build-config/-/blob/master/kali-config/common/package-lists/virtualization.list.chroot)
         $CHROOT_PARAMS $APT_PARAMS_VDI install qemu-guest-agent spice-vdagent
@@ -205,14 +210,12 @@ jobs:
         $CHROOT_PARAMS rm -rf "/etc/resolv.conf"
 
         # disable services
-        $CHROOT_PARAMS systemctl list-unit-files --no-pager
+        SERVICES_TO_DISABLE="rpcbind.socket rpcbind rpcbind.service rpc-statd-notify.service xrdp systemd-resolved.service lvm2-monitor.service mdadm-shutdown.service tor.service lvm2-lvmpolld.socket nfs-client.target remote-fs.target exim4.service exim4-base.timer fstrim.timer lm-sensors.service tftpd-hpa.service pmcd.service pmie.service pmproxy.service stunnel.target apt-daily-upgrade.timer apt-daily.timer e2scrub_all.timer  dpkg-db-backup.timer mdcheck_continue.timer mdcheck_start.timer mdmonitor-oneshot.timer nvmf-autoconnect.service nvmefc-boot-connections.service openvpn.service pmlogger.service system-bcachefsck.slice system-xfs_scrub.slice iscsid.socket dm-event.socket bcachefsck_all.timer xfs_scrub_all.timer atop-rotate.timer atopacct.service atop.service multipathd.service pcscd.socket tpm-dev.path tpm-udev.path hardinfo2.service atd.service"
         
-        $CHROOT_PARAMS systemctl mask rpcbind.socket
-        $CHROOT_PARAMS systemctl mask rpcbind
-        $CHROOT_PARAMS systemctl mask xrdp
-        $CHROOT_PARAMS systemctl mask systemd-resolved.service
-        $CHROOT_PARAMS systemctl mask tftpd-hpa.service
-
+        $CHROOT_PARAMS systemctl list-unit-files --no-pager
+        $CHROOT_PARAMS systemctl stop "$SERVICES_TO_DISABLE"
+        $CHROOT_PARAMS systemctl mask "$SERVICES_TO_DISABLE"
+        
         KALI_RELEASE_NAME="kali-maaaaz-edition-$(date '+%Y%m%d')"
         echo "KALI_RELEASE_NAME=$KALI_RELEASE_NAME" >> $GITHUB_ENV
         
@@ -220,7 +223,7 @@ jobs:
         KALI_RELEASE_PACKAGE_LIST_FILE="/tmp/$KALI_RELEASE_NAME-installed_packages.txt"
         echo "KALI_RELEASE_PACKAGE_LIST_FILE=$KALI_RELEASE_PACKAGE_LIST_FILE" >> $GITHUB_ENV
         
-        ($CHROOT_PARAMS dpkg -l | grep '^ii' | awk '{print $2 "\t" $3}' | column -t) > $KALI_RELEASE_PACKAGE_LIST_FILE
+        ($CHROOT_PARAMS dpkg-query -W -f='${Package} ${Version} ${Installed-Size;8}\n' | sort -n | column -t) > $KALI_RELEASE_PACKAGE_LIST_FILE
         
     - name: Unprepare environment 
       run: |
@@ -295,7 +298,7 @@ jobs:
         
     
     - name: Create a new Github release
-      uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564 #v2.0.4
+      uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 #v3.0.2
       with:
         body_path: ${{ env.KALI_RELEASE_NOTES }}
         name: ${{ env.KALI_RELEASE_NAME }}
