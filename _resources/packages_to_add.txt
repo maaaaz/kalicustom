@@ -123,7 +123,6 @@ libpq-dev
 libssl-dev
 libvhdi-utils
 libvmdk-utils
-libxml2
 lm-sensors
 lsd
 lsof
