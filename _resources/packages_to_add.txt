@@ -104,6 +104,7 @@ jq
 kbd
 keepassxc
 keyutils
+kmod
 krb5-admin-server
 krb5-kdc
 krb5-user
@@ -122,6 +123,7 @@ libpq-dev
 libssl-dev
 libvhdi-utils
 libvmdk-utils
+libxml2
 lm-sensors
 lsd
 lsof
