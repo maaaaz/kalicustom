@@ -154,7 +154,7 @@ jobs:
         # sysmon and procdump (and procmon when it will be packaged for Debian)
         $CHROOT_PARAMS wget -nv 'https://packages.microsoft.com/config/debian/13/packages-microsoft-prod.deb' -O '/tmp/packages-microsoft-prod.deb'
         $CHROOT_PARAMS dpkg -i '/tmp/packages-microsoft-prod.deb'
-
+        $CHROOT_PARAMS $APT_PARAMS_VDI update
         $CHROOT_PARAMS $APT_PARAMS_VDI install powershell procdump procmon sysmonforlinux
 
         # install non-packaged useful tools
