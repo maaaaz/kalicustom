@@ -106,7 +106,6 @@ jobs:
         set -xe
         cd /tmp/
         
-        #CHROOT_PARAMS="env DEBIAN_FRONTEND=noninteractive sudo --preserve-env chroot $VDI_ROOT/"
         CHROOT_PARAMS="env DEBIAN_FRONTEND=noninteractive sudo chroot $VDI_ROOT/"
         APT_PARAMS_VDI="apt -y -qq -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold"
 
@@ -153,14 +152,10 @@ jobs:
         $CHROOT_PARAMS $APT_PARAMS_VDI install qemu-guest-agent spice-vdagent
 
         # sysmon and procdump (and procmon when it will be packaged for Debian)
-        $CHROOT_PARAMS wget -nv 'https://packages.microsoft.com/debian/12/prod/pool/main/s/sysinternalsebpf/sysinternalsebpf_1.3.0_amd64.deb' -O '/tmp/sysinternalsebpf_1.3.0_amd64.deb'
-        $CHROOT_PARAMS dpkg -i '/tmp/sysinternalsebpf_1.3.0_amd64.deb'
-        
-        $CHROOT_PARAMS wget -nv 'https://packages.microsoft.com/debian/12/prod/pool/main/s/sysmonforlinux/sysmonforlinux_1.3.2_amd64.deb' -O '/tmp/sysmonforlinux_1.3.2_amd64.deb'
-        $CHROOT_PARAMS dpkg -i '/tmp/sysmonforlinux_1.3.2_amd64.deb'
-        
-        $CHROOT_PARAMS wget -nv 'https://packages.microsoft.com/debian/12/prod/pool/main/p/procdump/procdump_3.2.0_amd64.deb' -O '/tmp/procdump_3.2.0_amd64.deb'
-        $CHROOT_PARAMS dpkg -i '/tmp/procdump_3.2.0_amd64.deb'      
+        $CHROOT_PARAMS wget -nv 'https://packages.microsoft.com/config/debian/13/packages-microsoft-prod.deb' -O '/tmp/packages-microsoft-prod.deb'
+        $CHROOT_PARAMS dpkg -i '/tmp/packages-microsoft-prod.deb'
+
+        $CHROOT_PARAMS $APT_PARAMS_VDI install powershell procdump procmon sysmonforlinux
 
         # install non-packaged useful tools
         $CHROOT_PARAMS mkdir -p /opt/escobar/
@@ -209,8 +204,8 @@ jobs:
         SERVICES_TO_DISABLE="rpcbind.socket rpcbind rpcbind.service rpc-statd-notify.service xrdp systemd-resolved.service lvm2-monitor.service mdadm-shutdown.service tor.service lvm2-lvmpolld.socket nfs-client.target remote-fs.target exim4.service exim4-base.timer fstrim.timer lm-sensors.service tftpd-hpa.service pmcd.service pmie.service pmproxy.service stunnel.target apt-daily-upgrade.timer apt-daily.timer e2scrub_all.timer  dpkg-db-backup.timer mdcheck_continue.timer mdcheck_start.timer mdmonitor-oneshot.timer nvmf-autoconnect.service nvmefc-boot-connections.service openvpn.service pmlogger.service system-bcachefsck.slice system-xfs_scrub.slice iscsid.socket dm-event.socket bcachefsck_all.timer xfs_scrub_all.timer atop-rotate.timer atopacct.service atop.service multipathd.service pcscd.socket tpm-dev.path tpm-udev.path hardinfo2.service atd.service"
         
         $CHROOT_PARAMS systemctl list-unit-files --no-pager
-        $CHROOT_PARAMS systemctl stop "$SERVICES_TO_DISABLE"
-        $CHROOT_PARAMS systemctl mask "$SERVICES_TO_DISABLE"
+        $CHROOT_PARAMS systemctl stop $SERVICES_TO_DISABLE
+        $CHROOT_PARAMS systemctl mask $SERVICES_TO_DISABLE
         
         KALI_RELEASE_NAME="kali-maaaaz-edition-$(date '+%Y%m%d')"
         echo "KALI_RELEASE_NAME=$KALI_RELEASE_NAME" >> $GITHUB_ENV
