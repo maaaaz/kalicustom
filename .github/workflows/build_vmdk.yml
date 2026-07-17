@@ -224,9 +224,11 @@ jobs:
         echo "[+] findmnt before unmount"
         findmnt
         echo
-        
-        sudo umount $VDI_ROOT/proc/
+        sleep 2
+
+        sudo umount $VDI_ROOT/sys/firmware/efi/efivars
         sudo umount $VDI_ROOT/sys/
+        sudo umount $VDI_ROOT/proc/
         sudo umount $VDI_ROOT/dev/pts/
         sudo umount $VDI_ROOT/dev/
         sudo umount $VDI_ROOT
